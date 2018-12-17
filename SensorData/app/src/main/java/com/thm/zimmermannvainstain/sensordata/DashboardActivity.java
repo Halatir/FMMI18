@@ -1,15 +1,33 @@
 package com.thm.zimmermannvainstain.sensordata;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.AutoTransition;
+import android.transition.Scene;
+import android.transition.Transition;
+import android.transition.TransitionManager;
+import android.util.Pair;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DashboardActivity extends AppCompatActivity {
+    
+    private Activity thisA;
+    private Intent Sensorintent;
+    private TextView tview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,12 +36,52 @@ public class DashboardActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        thisA=this;
+        ClickListeners();
+        Sensorintent = new Intent(this, SensorService.class);
+        startService(Sensorintent);
+
+        updateTime();
+
        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                stopService(Sensorintent);
+            }
+        });
+    }
+
+    Runnable updater;
+    void updateTime() {
+        tview=(TextView) findViewById(R.id.textView);
+        final Handler timerHandler = new Handler();
+
+        updater = new Runnable() {
+            @Override
+            public void run() {
+                if(SensorService.singleton!=null&& SensorService.singleton.ready){
+                    float[] f = SensorService.singleton.getAcc();
+                    tview.setText(Float.toString(f[0]));
+                }else{
+                    tview.setText("SensorService not Active");
+                }
+                timerHandler.postDelayed(updater,1000);
+            }
+        };
+        timerHandler.post(updater);
+    }
+
+    private void ClickListeners(){
+        findViewById(R.id.gps).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(thisA,
+                        Pair.create(findViewById(R.id.textView), "testText"),
+                        Pair.create(findViewById(R.id.imageView), "robot"));
+
+                Intent intent = new Intent(thisA, gps_large_Activity.class);
+                startActivity(intent, options.toBundle());
             }
         });
     }
