@@ -1,5 +1,10 @@
 # FMMI18
 
+**App to get sensor data from android phone**
+
+Studentproject from Thamar and Olga  
+Technische Hochschule Mittelhessen 2018/2019
+
 ## Colors & Icons
 
 Color Scheme: https://www.schemecolor.com/science-experiment.php  

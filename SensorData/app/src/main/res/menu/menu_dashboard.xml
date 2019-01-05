@@ -2,8 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.thm.zimmermannvainstain.sensordata.DashboardActivity" >
-    <item android:id="@+id/action_settings"
+    <item android:id="@+id/action_export"
         android:title="@string/action_settings"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        android:icon="@drawable/export"
+        app:showAsAction="always" />
 </menu>
