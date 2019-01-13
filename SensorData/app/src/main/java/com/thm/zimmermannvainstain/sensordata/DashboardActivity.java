@@ -1,5 +1,6 @@
 package com.thm.zimmermannvainstain.sensordata;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.AutoTransition;
@@ -38,6 +40,10 @@ public class DashboardActivity extends AppCompatActivity {
 
         thisA=this;
         ClickListeners();
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.READ_CONTACTS},1);
+
         Sensorintent = new Intent(this, SensorService.class);
         startService(Sensorintent);
 

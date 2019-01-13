@@ -16,14 +16,18 @@ public class SensorService extends Service implements SensorEventListener {
 
     public static SensorService singleton;
 
+    private Sensor mAccelerometer;
+    private Sensor mGyroscope;
+
     private HandlerThread mSensorThread;
     private Handler mSensorHandler;
     private  SensorManager mSensorManager;
-    private  Sensor mAccelerometer;
     public boolean ready = false;
     Context context;
 
     private float[] Acc = {0.0f,0.0f,0.0f};
+    private float[] Gyr = {0.0f,0.0f,0.0f};
+
 
     @Override
     public int onStartCommand(Intent intent,int flags, int startId){
@@ -38,11 +42,13 @@ public class SensorService extends Service implements SensorEventListener {
 
         mSensorManager = (SensorManager)context.getSystemService(context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
         mSensorThread = new HandlerThread("Sensor thread", Thread.MAX_PRIORITY);
         mSensorThread.start();
         mSensorHandler = new Handler(mSensorThread.getLooper()) ;//Blocks until looper is prepared, which is fairly quick
         mSensorManager.registerListener(this, mAccelerometer, 100, mSensorHandler);
+        mSensorManager.registerListener(this, mGyroscope,100,mSensorHandler);
         ready=true;
         return super.onStartCommand(intent, flags, startId);
 
@@ -65,6 +71,19 @@ public class SensorService extends Service implements SensorEventListener {
         Log.d("SensorData","Service has been destroyed");
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(event.sensor.getType()==1){//Accelerometer
+            setAcc(event.values);}
+        else if(event.sensor.getType()==4){//Gyroscope
+            setGyr(event.values);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 
     public void setAcc(float[] f){
         synchronized(Acc){
@@ -77,15 +96,15 @@ public class SensorService extends Service implements SensorEventListener {
         }
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType()==1)
-            setAcc(event.values);
+    public float[] getGyr(){
+        synchronized (Gyr){
+            return Gyr;
+        }
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+    public void setGyr(float[] f){
+        synchronized (Gyr){
+            Gyr = f;
+        }
     }
-
 }
