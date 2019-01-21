@@ -16,27 +16,58 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/gps"
             android:layout_width="match_parent"
-            android:layout_height="150dp">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:transitionName="robot"
                 app:srcCompat="@mipmap/ic_launcher" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/Headline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="GPS:"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 android:transitionName="testText"
-                android:text="Sample Text and Image"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/lat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="lat: "
+                android:textColor="#000000"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Headline"
+                tools:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/longi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="long: "
+                android:textColor="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lat" />
+
+        </android.support.constraint.ConstraintLayout>
 
         <View
             android:id="@+id/divider"
@@ -44,12 +75,56 @@
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/gravity"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/accelerationSpeed"
             android:layout_width="match_parent"
-            android:layout_height="150dp" >
+            android:layout_height="wrap_content">
 
-        </android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/headlineAS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Beschleunigung:"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/accX"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="X:"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/headlineAS" />
+
+            <TextView
+                android:id="@+id/accY"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Y:"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/accX" />
+
+            <TextView
+                android:id="@+id/accZ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="Z:"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/accY" />
+        </android.support.constraint.ConstraintLayout>
 
         <View
             android:id="@+id/divider2"
@@ -69,11 +144,6 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/speed"
-            android:layout_width="match_parent"
-            android:layout_height="150dp" />
 
 
     </LinearLayout>
