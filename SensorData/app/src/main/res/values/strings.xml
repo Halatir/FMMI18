@@ -12,6 +12,7 @@
     <string name="nav_hader_desc">Navigation header</string>
     <string name="title_activity_maptest">maptest</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_accelo_speed_">accelo_speed_Activity</string>
 
 
 </resources>

@@ -86,10 +86,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Beschleunigung:"
+                android:text="Beschleunigung"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:transitionName="head2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,7 +102,8 @@
                 android:layout_marginTop="16dp"
                 android:text="X:"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/headlineAS" />
+                app:layout_constraintTop_toBottomOf="@+id/headlineAS"
+                android:transitionName="accX"/>
 
             <TextView
                 android:id="@+id/accY"
@@ -111,7 +113,8 @@
                 android:layout_marginTop="8dp"
                 android:text="Y:"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/accX" />
+                app:layout_constraintTop_toBottomOf="@+id/accX"
+                android:transitionName="accY"/>
 
             <TextView
                 android:id="@+id/accZ"
@@ -123,7 +126,8 @@
                 android:text="Z:"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/accY" />
+                app:layout_constraintTop_toBottomOf="@+id/accY"
+                android:transitionName="accZ"/>
         </android.support.constraint.ConstraintLayout>
 
         <View
@@ -141,6 +145,42 @@
 
         <View
             android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/pressure"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Luftdruck"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/pressureT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Luftruck: "
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <View
+            android:id="@+id/divider4"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />

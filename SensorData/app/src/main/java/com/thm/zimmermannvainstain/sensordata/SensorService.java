@@ -18,16 +18,13 @@ public class SensorService extends Service implements SensorEventListener {
 
     public static SensorService singleton;
 
-    private Sensor mAccelerometer;
-    private Sensor mGyroscope;
-
-    private HandlerThread mSensorThread;
-    private Handler mSensorHandler;
     private  SensorManager mSensorManager;
     public boolean ready = false;
     Context context;
 
     private float[] Acc = {0.0f,0.0f,0.0f};
+    //TODO not locked correctly
+    public long AccTimeStamp = 0;
     private float[] Gyr = {0.0f,0.0f,0.0f};
 
     public boolean logging = false;
@@ -46,14 +43,16 @@ public class SensorService extends Service implements SensorEventListener {
         context= getApplicationContext();
 
         mSensorManager = (SensorManager)context.getSystemService(context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        Sensor m_Accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor m_Gyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        Sensor m_Barometer = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
 
-        mSensorThread = new HandlerThread("Sensor thread", Thread.MAX_PRIORITY);
-        mSensorThread.start();
-        mSensorHandler = new Handler(mSensorThread.getLooper()) ;//Blocks until looper is prepared, which is fairly quick
-        mSensorManager.registerListener(this, mAccelerometer, 8300, mSensorHandler);//120 sample in one second
-        mSensorManager.registerListener(this, mGyroscope,8300,mSensorHandler);
+        HandlerThread m_SensorThread = new HandlerThread("Sensor thread", Thread.MAX_PRIORITY);
+        m_SensorThread.start();
+        Handler mSensorHandler = new Handler(m_SensorThread.getLooper());
+        mSensorManager.registerListener(this, m_Accelerometer, 8300, mSensorHandler);//120 sample in one second
+        mSensorManager.registerListener(this, m_Gyroscope,8300, mSensorHandler);
+        mSensorManager.registerListener(this,m_Barometer,8300,mSensorHandler);
         ready=true;
         return super.onStartCommand(intent, flags, startId);
 
@@ -80,12 +79,16 @@ public class SensorService extends Service implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         String log="";
+
+        //event.timestamp does not return utc time, but time since last systemboot. it is easyer to get current time when called.
+        long l= System.currentTimeMillis();
         if(logging) {
             //If Values are not in the same format, we need to put the String constructer inside the getType
-            log = Long.toString(event.timestamp) + "," + Float.toString(event.values[0]) + "," +
+            log = Long.toString(l) + "," + Float.toString(event.values[0]) + "," +
                     Float.toString(event.values[1]) + "," + Float.toString(event.values[2]) + "," + Float.toString(event.accuracy) + "\n\r";
         }
         if(event.sensor.getType()==1){//Accelerometer
+            AccTimeStamp = l;
             setAcc(event.values);
             if(logging){
                 AccLog.add(log);
@@ -115,6 +118,7 @@ public class SensorService extends Service implements SensorEventListener {
 
     }
 
+    //TODO find out if this is the right way to prevent the objects from beeing accesed by different Threads
     public void setAcc(float[] f){
         synchronized(Acc){
             Acc=f;

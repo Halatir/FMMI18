@@ -62,6 +62,11 @@
         <service
             android:name=".LogService"
             android:exported="false" />
+
+        <activity
+            android:name=".accelo_speed_Activity"
+            android:label="@string/title_activity_accelo_speed_"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

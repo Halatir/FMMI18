@@ -29,6 +29,7 @@ public class DashboardActivity extends AppCompatActivity {
     private Activity activity;
     private Intent sensorIntent;
     private Intent gpsIntent;
+    final Handler timerHandler = new Handler();
 
     private DrawerLayout mDrawerLayout;
 
@@ -78,16 +79,15 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     Runnable updater;
+    private boolean kill = false;
     void Update() {
-        final Handler timerHandler = new Handler();
-        final TextView lat=(TextView) findViewById(R.id.lat);
-        final TextView longi=(TextView) findViewById(R.id.longi);
-        final TextView accX = (TextView) findViewById(R.id.accX);
-        final TextView accY = (TextView) findViewById(R.id.accY);
-        final TextView accZ = (TextView) findViewById(R.id.accZ);
-
 
         updater = new Runnable() {
+            private TextView lat=(TextView) findViewById(R.id.lat);
+            private TextView longi=(TextView) findViewById(R.id.longi);
+            private TextView accX = (TextView) findViewById(R.id.accX);
+            private TextView accY = (TextView) findViewById(R.id.accY);
+            private TextView accZ = (TextView) findViewById(R.id.accZ);
             @SuppressLint("SetTextI18n")//remove to find all texts unable to translate
             @Override
             public void run() {
@@ -105,14 +105,15 @@ public class DashboardActivity extends AppCompatActivity {
 
                 if(SensorService.singleton!=null&& SensorService.singleton.ready){
                     float[] f = SensorService.singleton.getAcc();
-                    accX.setText(Float.toString(f[0]));
-                    accY.setText(Float.toString(f[1]));
-                    accZ.setText(Float.toString(f[2]));
+                    accX.setText("X-Achse: " +Float.toString(f[0]));
+                    accY.setText("Y-Achse: " +Float.toString(f[1]));
+                    accZ.setText("Z-Achse: " +Float.toString(f[2]));
 
                 }else{
                     accX.setText("SensorService not Active");
                 }
-                timerHandler.postDelayed(updater,32);//15 frames right now
+                if(!kill)
+                    timerHandler.postDelayed(updater,64);//15 frames right now
             }
         };
         timerHandler.post(updater);
@@ -142,6 +143,18 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(intent, options.toBundle());
             }
         });
+        findViewById(R.id.accelerationSpeed).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(activity,
+                        Pair.create(findViewById(R.id.headlineAS),"head2"),
+                        Pair.create(findViewById(R.id.accX),"accX"),
+                Pair.create(findViewById(R.id.accY),"accY"),
+                Pair.create(findViewById(R.id.accZ),"accZ"));
+                Intent intent = new Intent(activity, accelo_speed_Activity.class);
+                startActivity(intent,options.toBundle());
+            }
+        });
     }
 
     @Override
@@ -151,13 +164,29 @@ public class DashboardActivity extends AppCompatActivity {
         return true;
     }
 
+    //If MainActivity is destroyed before App is suspended ( zb. because we are in another Activty real long) our services get destrpyed.//TODO Check
     @Override
     public void onDestroy(){
+        kill=true;
+        timerHandler.removeCallbacks(updater);
         SensorService.singleton.logging=false;
         stopService(sensorIntent);
         stopService(gpsIntent);
         Log.d("DashboardActivity","Activity has been destroyed");
         super.onDestroy();
+    }
+
+    @Override
+    public void onPause(){
+        kill=true;
+        timerHandler.removeCallbacks(updater);
+        super.onPause();
+    }
+    @Override
+    public void onResume(){
+        kill=false;
+        Update();
+        super.onResume();
     }
 
     @Override

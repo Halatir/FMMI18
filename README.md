@@ -14,8 +14,8 @@ Export Icon: https://www.flaticon.com/free-icon/export-file_1236616#term=export&
 
 ## To Dos
 
-- [ ] start sensor service on buttonclick (eg. play button)
-- [ ] export sensorData file
+- [x] start sensor service on start
+- [x] export sensorData file on Buttonclick (floating action Button)
 - [ ] change screen content on menuitem click
 - [ ] traffic light status for menuitems
 - [ ] dashboard content
@@ -29,3 +29,6 @@ Export Icon: https://www.flaticon.com/free-icon/export-file_1236616#term=export&
     - [ ] Strecke (km / bildlich)
     - [ ] Luftdruck
     - [ ] Rotation
+
+Graph Library: 
+ 'com.jjoe64:graphview:4.2.2'
