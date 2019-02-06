@@ -31,10 +31,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="AccX:"
+        android:text="X:"
+        android:transitionName="accX"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Headline"
-        android:transitionName="accX"/>
+        app:layout_constraintTop_toBottomOf="@+id/mitg" />
 
     <TextView
         android:id="@+id/accY"
@@ -42,10 +42,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="AccY:"
+        android:text="Y:"
+        android:transitionName="accY"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/accX"
-        android:transitionName="accY"/>
+        app:layout_constraintTop_toBottomOf="@+id/accX" />
 
     <TextView
         android:id="@+id/accZ"
@@ -53,10 +53,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="AccY:"
+        android:text="Y:"
+        android:transitionName="accZ"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/accY"
-        android:transitionName="accZ"/>
+        app:layout_constraintTop_toBottomOf="@+id/accY" />
 
     <TextView
         android:id="@+id/hochst"
@@ -68,6 +68,88 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/graph" />
 
+    <TextView
+        android:id="@+id/mitg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="mit G:"
+        android:transitionName="mitG"
+        app:layout_constraintStart_toEndOf="@+id/accX"
+        app:layout_constraintTop_toBottomOf="@+id/Headline" />
+
+    <TextView
+        android:id="@+id/ohneG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="100dp"
+        android:text="ohne G:"
+        android:transitionName="ohneG"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Headline" />
+
+    <TextView
+        android:id="@+id/mitgX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/mitg"
+        app:layout_constraintTop_toBottomOf="@+id/mitg"
+        android:transitionName="mitgX"/>
+
+    <TextView
+        android:id="@+id/mitgY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/mitg"
+        app:layout_constraintTop_toBottomOf="@+id/mitgX"
+        android:transitionName="mitgY"/>
+
+    <TextView
+        android:id="@+id/mitgZ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/mitg"
+        app:layout_constraintTop_toBottomOf="@+id/mitgY"
+        android:transitionName="mitgZ"/>
+
+    <TextView
+        android:id="@+id/ohnegX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/ohneG"
+        app:layout_constraintTop_toBottomOf="@+id/ohneG"
+        android:transitionName="ohnegX"/>
+
+    <TextView
+        android:id="@+id/ohnegY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/ohneG"
+        app:layout_constraintTop_toBottomOf="@+id/ohnegX"
+        android:transitionName="ohnegY"/>
+
+    <TextView
+        android:id="@+id/ohnegZ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/ohneG"
+        app:layout_constraintTop_toBottomOf="@+id/ohnegY"
+        android:transitionName="ohnegZ"/>
+
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
         android:layout_width="match_parent"
@@ -76,5 +158,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/accZ" />
+
+    <ImageView
+        android:id="@+id/accTraffic"
+        android:layout_width="29dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/Headline"
+        app:srcCompat="@drawable/dot_red"
+        android:transitionName="accTraffic"/>
 
 </android.support.constraint.ConstraintLayout>

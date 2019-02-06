@@ -16,19 +16,22 @@ Export Icon: https://www.flaticon.com/free-icon/export-file_1236616#term=export&
 
 - [x] start sensor service on start
 - [x] export sensorData file on Buttonclick (floating action Button)
-- [ ] change screen content on menuitem click
-- [ ] traffic light status for menuitems
-- [ ] dashboard content
-- [ ] edit dashboard content
+- [-] change screen content on menuitem click
+- [-] traffic light status for menuitems
+- [-] dashboard content
 - [ ] compass view in dashboard
 - [ ] sensordata content:
-    - [ ] Geschwindigkeit (Durchschnitt, Maximal, Aktuell)
-    - [ ] Beschleunigung (mit g / ohne g)
+    - [-] Geschwindigkeit (Durchschnitt, Maximal, Aktuell)(via GPS)test nötig
+    - [x] Beschleunigung (mit g / ohne g)
     - [ ] Bremskraft
     - [ ] Ortsposition
-    - [ ] Strecke (km / bildlich)
-    - [ ] Luftdruck
+    - [-] Strecke (km / bildlich) bildlich sehr sehr aufwendig
+    - [x] Luftdruck
     - [ ] Rotation
 
 Graph Library: 
  'com.jjoe64:graphview:4.2.2'
+
+Timestamp richtig ausrechnen
+aufzeichnungsbutton tauschen für feedback in subactivitys
+Kompass?

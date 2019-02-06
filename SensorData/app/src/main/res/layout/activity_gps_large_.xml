@@ -6,28 +6,126 @@
     android:layout_height="match_parent"
     tools:context=".gps_large_Activity">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="144dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:transitionName="robot"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="Sample Text and Image"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="GPS"
         android:textSize="24sp"
+        android:transitionName="testText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        android:transitionName="testText"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="lat: "
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/longi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="long:"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lat"
+        tools:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/nn4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Geschwindigkeit:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/longi" />
+
+    <TextView
+        android:id="@+id/nn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Aktuell"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nn4" />
+
+    <TextView
+        android:id="@+id/nn6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="maximal"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/nn"
+        app:layout_constraintTop_toBottomOf="@+id/nn4" />
+
+    <TextView
+        android:id="@+id/nn7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="durchschnittlich"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/nn6"
+        app:layout_constraintTop_toBottomOf="@+id/nn4" />
+
+    <TextView
+        android:id="@+id/aktuell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="0.0"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/nn"
+        app:layout_constraintTop_toBottomOf="@+id/nn" />
+
+    <TextView
+        android:id="@+id/max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="0.0"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/nn6"
+        app:layout_constraintTop_toBottomOf="@+id/nn6" />
+
+    <TextView
+        android:id="@+id/avg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="0.0"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/nn7"
+        app:layout_constraintTop_toBottomOf="@+id/nn7" />
+
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/max" />
+
 </android.support.constraint.ConstraintLayout>

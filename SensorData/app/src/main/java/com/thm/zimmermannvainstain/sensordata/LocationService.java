@@ -28,10 +28,17 @@ public class LocationService extends Service implements LocationListener {
 
     Context context;
 
-    private double[] GPS = {0.0d,0.0d,0.0d};
+    private double[] GPS = {0.0d,0.0d,50.0d};
+    public float speed =0.0f;
+    public float maxSpeed =0.0f;
+    public float avgSpeed =0.0f;
+    public float distance =0.0f;
     public boolean logging = false;
+    private double[] lastDistGPS = {0.0d,0.0d,0.0d};
+
     private static int bufferAmount = 1000;
     private ArrayList gpsLog = new ArrayList(bufferAmount);
+    private ArrayList speeds = new ArrayList();
 
     public int onStartCommand(Intent intent,int flags, int startId) {
         if (singleton == null) {
@@ -90,7 +97,19 @@ public class LocationService extends Service implements LocationListener {
         d[0] = location.getLatitude();
         d[1] = location.getLongitude();
         d[2] = location.getAccuracy();
+
         setGPS(d);
+
+        if(d[2]<30 && lastDistGPS[0]!=0.0d){
+            float[] dist = new float[1];
+            Location.distanceBetween(
+                    lastDistGPS[0],lastDistGPS[1],
+                    d[0], d[1], dist);
+            lastDistGPS = d;
+            distance = distance + dist[0];
+        }else if(d[2]<30){
+            lastDistGPS = d;
+        }
         if(logging){
             String log = Long.toString(location.getTime()) +"," + Double.toString(location.getLatitude()) + "," +
                     Double.toString(location.getLongitude()) + "," + Double.toString(location.getAccuracy()) + "," + location.getProvider() + "\n\r" ;
@@ -100,7 +119,17 @@ public class LocationService extends Service implements LocationListener {
                 LogService.WriteDataToFile(this, data, "location");
                 gpsLog.clear();
             }
-
+        }
+        if(location.hasSpeed()){
+            speed = location.getSpeed()*3.6f;
+            speeds.add(speed);
+            float f =0;
+            for(int i =0;i<speeds.size();i++){
+                f+=(float) speeds.get(i);
+            }
+            avgSpeed = f/speeds.size();
+            if(speed>maxSpeed)
+                maxSpeed=speed;
         }
     }
 

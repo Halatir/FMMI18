@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
@@ -55,20 +56,32 @@ public class accelo_speed_Activity extends AppCompatActivity {
 
         updater = new Runnable() {
             private int counter =0;
-            private TextView accX = (TextView) findViewById(R.id.accX);
-            private TextView accY = (TextView) findViewById(R.id.accY);
-            private TextView accZ = (TextView) findViewById(R.id.accZ);
+            private TextView accXg = (TextView) findViewById(R.id.mitgX);
+            private TextView accYg = (TextView) findViewById(R.id.mitgY);
+            private TextView accZg = (TextView) findViewById(R.id.mitgZ);
+
+            private TextView accX = (TextView) findViewById(R.id.ohnegX);
+            private TextView accY = (TextView) findViewById(R.id.ohnegY);
+            private TextView accZ = (TextView) findViewById(R.id.ohnegZ);
             private TextView max = (TextView) findViewById(R.id.hochst);
+
+            private ImageView traffic = (ImageView) findViewById(R.id.accTraffic);
 
             @SuppressLint("SetTextI18n")//remove to find all texts unable to translate
             @Override
             public void run() {
 
                 if(SensorService.singleton!=null&& SensorService.singleton.ready){
-                    float[] f = SensorService.singleton.getAcc();
-                    accX.setText("X-Achse: "+Float.toString(f[0]));
-                    accY.setText("Y-Achse: "+Float.toString(f[1]));
-                    accZ.setText("Z-Achse: "+Float.toString(f[2]));
+                    float[] f = SensorService.singleton.getAcc_o_g();
+                    accX.setText(" " + Float.toString(f[0]));
+                    accY.setText(" " + Float.toString(f[1]));
+                    accZ.setText(" " + Float.toString(f[2]));
+
+                    f = SensorService.singleton.getAcc();
+                    accXg.setText(" " +Float.toString(f[0]));
+                    accYg.setText(" " +Float.toString(f[1]));
+                    accZg.setText(" " +Float.toString(f[2]));
+
                     mSeries.appendData(new DataPoint(counter,f[0]),true,1000);
                     mSeriesY.appendData(new DataPoint(counter,f[1]),true,1000);
                     mSeriesZ.appendData(new DataPoint(counter,f[2]),true,1000);
@@ -77,6 +90,18 @@ public class accelo_speed_Activity extends AppCompatActivity {
                     if(maxAcceleration<f[1]){maxAcceleration = f[1]; maxTimestamp = getDate(SensorService.singleton.AccTimeStamp);}
                     if(maxAcceleration<f[2]){maxAcceleration = f[2]; maxTimestamp = getDate(SensorService.singleton.AccTimeStamp);}
                     max.setText("Höchstbeschleunigung: "+ maxAcceleration + " am "+ maxTimestamp);
+
+                    switch((int)f[3]){
+                        case 1:
+                            traffic.setImageResource(R.drawable.dot_red);
+                            break;
+                        case 2:
+                            traffic.setImageResource(R.drawable.dot_orange);
+                            break;
+                        case 3:
+                            traffic.setImageResource(R.drawable.dot_grun);
+                            break;
+                    }
 
 
                 }else{
