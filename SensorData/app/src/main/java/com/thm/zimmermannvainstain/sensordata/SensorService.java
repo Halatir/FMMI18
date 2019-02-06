@@ -18,15 +18,19 @@ public class SensorService extends Service implements SensorEventListener {
 
     private Sensor mAccelerometer;
     private Sensor mGyroscope;
+    private Sensor mMagnetometer;
 
     private HandlerThread mSensorThread;
     private Handler mSensorHandler;
-    private  SensorManager mSensorManager;
+    public  SensorManager mSensorManager;
+
     public boolean ready = false;
     Context context;
 
     private float[] Acc = {0.0f,0.0f,0.0f};
     private float[] Gyr = {0.0f,0.0f,0.0f};
+    private float[] Mag = new float[3];
+    private boolean RotMat;
 
 
     @Override
@@ -43,12 +47,14 @@ public class SensorService extends Service implements SensorEventListener {
         mSensorManager = (SensorManager)context.getSystemService(context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         mSensorThread = new HandlerThread("Sensor thread", Thread.MAX_PRIORITY);
         mSensorThread.start();
         mSensorHandler = new Handler(mSensorThread.getLooper()) ;//Blocks until looper is prepared, which is fairly quick
         mSensorManager.registerListener(this, mAccelerometer, 100, mSensorHandler);
         mSensorManager.registerListener(this, mGyroscope,100,mSensorHandler);
+        mSensorManager.registerListener(this, mMagnetometer,100,mSensorHandler);
         ready=true;
         return super.onStartCommand(intent, flags, startId);
 
@@ -73,11 +79,24 @@ public class SensorService extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        float[] mAccelerationValues = new float [3];
+        float[] mGravityValues = new float [3];
+        float[] mRotationMatrix=new float[9];
+
+
         if(event.sensor.getType()==1){//Accelerometer
-            setAcc(event.values);}
+            mAccelerationValues = event.values;
+            setAcc(mAccelerationValues);
+        }
         else if(event.sensor.getType()==4){//Gyroscope
             setGyr(event.values);
         }
+        else if(event.sensor.getType()== Sensor.TYPE_MAGNETIC_FIELD){
+            mGravityValues = event.values;
+            setMag(mGravityValues);
+        }
+        RotMat = SensorManager.getRotationMatrix(mRotationMatrix, null, mAccelerationValues, mGravityValues);
+        setRotMat(RotMat);
     }
 
     @Override
@@ -106,5 +125,25 @@ public class SensorService extends Service implements SensorEventListener {
         synchronized (Gyr){
             Gyr = f;
         }
+    }
+
+    public void setMag(float[] f){
+        synchronized (Mag){
+            Mag = f;
+        }
+    }
+
+    public float[] getMag(){
+        synchronized (Mag){
+            return Mag;
+        }
+    }
+
+    public void setRotMat(boolean bool){
+        RotMat = bool;
+    }
+
+    public boolean getRotMat(){
+        return RotMat;
     }
 }

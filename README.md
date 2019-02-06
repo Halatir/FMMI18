@@ -24,8 +24,7 @@ Export Icon: https://www.flaticon.com/free-icon/export-file_1236616#term=export&
 - [ ] sensordata content:
     - [ ] Geschwindigkeit (Durchschnitt, Maximal, Aktuell)
     - [ ] Beschleunigung (mit g / ohne g)
-    - [ ] Bremskraft
     - [ ] Ortsposition
     - [ ] Strecke (km / bildlich)
-    - [ ] Luftdruck
+    - [ ] Höhenmeter
     - [ ] Rotation

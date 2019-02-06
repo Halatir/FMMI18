@@ -3,7 +3,9 @@ package com.thm.zimmermannvainstain.sensordata;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +21,8 @@ import android.util.Pair;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -27,6 +31,8 @@ public class DashboardActivity extends AppCompatActivity {
     private Intent Sensorintent;
     private TextView tview;
     private DrawerLayout mDrawerLayout;
+
+    private ImageView mImageViewCompass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,18 +90,32 @@ public class DashboardActivity extends AppCompatActivity {
         tview=(TextView) findViewById(R.id.textView);
         final Handler timerHandler = new Handler();
 
+        //float [] mAcceletationValues = new float[3];
+        float [] mRotationMatrix = new float[9];
+        float mLastDirectionInDegrees = 0f;
+
         updater = new Runnable() {
+            Context context =getApplicationContext();
+            SensorManager mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
             @Override
             public void run() {
                 if(SensorService.singleton!=null&& SensorService.singleton.ready){
                     float[] f = SensorService.singleton.getAcc();
                     tview.setText(Float.toString(f[0]));
+                    float [] mGravityValues = SensorService.singleton.getMag();
                 }else{
                     tview.setText("SensorService not Active");
                 }
                 timerHandler.postDelayed(updater,1000);
+
+                boolean success = SensorService.singleton.getRotMat();
+                if(success) {
+                    float [] orientationValues = new float[3];
+                    //SensorService.singleton.mSensorManager.getOrientation()
+                }
             }
         };
+
         timerHandler.post(updater);
     }
 
@@ -119,8 +139,8 @@ public class DashboardActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
         return true;
     }
-
-    /*@Override
+    /*
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
