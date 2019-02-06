@@ -18,30 +18,19 @@ public class SensorService extends Service implements SensorEventListener {
 
     public static SensorService singleton;
 
-<<<<<<< HEAD
-    private Sensor mAccelerometer;
-    private Sensor mGyroscope;
-    private Sensor mMagnetometer;
-
-    private HandlerThread mSensorThread;
-    private Handler mSensorHandler;
     public  SensorManager mSensorManager;
 
-=======
-    private  SensorManager mSensorManager;
->>>>>>> 6405807451c2f95dbc5393074c1b0cc7df1378a1
     public boolean ready = false;
     Context context;
 
     private float[] Acc = {0.0f,0.0f,0.0f,0.0f};
     private float[] Acc_o_g = {0.0f,0.0f,0.0f};
     private float[] Gyr = {0.0f,0.0f,0.0f};
-<<<<<<< HEAD
+
     private float[] Mag = new float[3];
     private boolean RotMat;
-=======
+
     private float[] pressure = {0.0f,0.0f,0.0f};
->>>>>>> 6405807451c2f95dbc5393074c1b0cc7df1378a1
 
     //TODO not locked correctly
     public long AccTimeStamp = 0;
@@ -65,19 +54,6 @@ public class SensorService extends Service implements SensorEventListener {
 
         context= getApplicationContext();
 
-        mSensorManager = (SensorManager)context.getSystemService(context.SENSOR_SERVICE);
-<<<<<<< HEAD
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-
-        mSensorThread = new HandlerThread("Sensor thread", Thread.MAX_PRIORITY);
-        mSensorThread.start();
-        mSensorHandler = new Handler(mSensorThread.getLooper()) ;//Blocks until looper is prepared, which is fairly quick
-        mSensorManager.registerListener(this, mAccelerometer, 100, mSensorHandler);
-        mSensorManager.registerListener(this, mGyroscope,100,mSensorHandler);
-        mSensorManager.registerListener(this, mMagnetometer,100,mSensorHandler);
-=======
         Sensor m_Accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Sensor m_Gyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         Sensor m_Barometer = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
@@ -94,7 +70,6 @@ public class SensorService extends Service implements SensorEventListener {
         mSensorManager.registerListener(this, m_Accelo_ohne_g,8300,mSensorHandler);
         mSensorManager.registerListener(this, m_light, 8300, mSensorHandler);
         mSensorManager.registerListener(this,m_magneto,8300,mSensorHandler);
->>>>>>> 6405807451c2f95dbc5393074c1b0cc7df1378a1
         ready=true;
         return super.onStartCommand(intent, flags, startId);
 
@@ -120,20 +95,10 @@ public class SensorService extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-<<<<<<< HEAD
         float[] mAccelerationValues = new float [3];
         float[] mGravityValues = new float [3];
         float[] mRotationMatrix=new float[9];
-
-
-        if(event.sensor.getType()==1){//Accelerometer
-            mAccelerationValues = event.values;
-            setAcc(mAccelerationValues);
-        }
-        else if(event.sensor.getType()==4){//Gyroscope
-            setGyr(event.values);
-=======
-        String log="";
+        String log ="";
 
         //event.timestamp does not return utc time, but time since last systemboot. it is easyer to get current time when called. TODO: Berechne UTC von event.timestamp
         long l= System.currentTimeMillis();
@@ -211,14 +176,7 @@ public class SensorService extends Service implements SensorEventListener {
                     light = event.values[0];
                 }
                 break;
->>>>>>> 6405807451c2f95dbc5393074c1b0cc7df1378a1
         }
-        else if(event.sensor.getType()== Sensor.TYPE_MAGNETIC_FIELD){
-            mGravityValues = event.values;
-            setMag(mGravityValues);
-        }
-        RotMat = SensorManager.getRotationMatrix(mRotationMatrix, null, mAccelerationValues, mGravityValues);
-        setRotMat(RotMat);
     }
 
     @Override
@@ -271,23 +229,4 @@ public class SensorService extends Service implements SensorEventListener {
         }
     }
 
-    public void setMag(float[] f){
-        synchronized (Mag){
-            Mag = f;
-        }
-    }
-
-    public float[] getMag(){
-        synchronized (Mag){
-            return Mag;
-        }
-    }
-
-    public void setRotMat(boolean bool){
-        RotMat = bool;
-    }
-
-    public boolean getRotMat(){
-        return RotMat;
-    }
 }

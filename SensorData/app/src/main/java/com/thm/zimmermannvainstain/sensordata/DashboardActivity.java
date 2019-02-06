@@ -6,17 +6,14 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-<<<<<<< HEAD
-import android.hardware.SensorManager;
-=======
 import android.content.pm.PackageManager;
->>>>>>> 6405807451c2f95dbc5393074c1b0cc7df1378a1
+import android.hardware.SensorManager;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,17 +23,13 @@ import android.util.Pair;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-<<<<<<< HEAD
-import android.view.ViewGroup;
-=======
->>>>>>> 6405807451c2f95dbc5393074c1b0cc7df1378a1
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Locale;
 
 public class DashboardActivity extends AppCompatActivity {
-    
+
     private Activity activity;
     private Intent sensorIntent;
     private Intent gpsIntent;
@@ -57,10 +50,10 @@ public class DashboardActivity extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
-        activity =this;
+        activity = this;
 
         ActivityCompat.requestPermissions(activity,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 1);
 
         sensorIntent = new Intent(this, SensorService.class);
@@ -93,19 +86,20 @@ public class DashboardActivity extends AppCompatActivity {
 
     Runnable updater;
     private boolean kill = false;
+
     void Update() {
 
         //float [] mAcceletationValues = new float[3];
-        float [] mRotationMatrix = new float[9];
+        float[] mRotationMatrix = new float[9];
         float mLastDirectionInDegrees = 0f;
 
         updater = new Runnable() {
-<<<<<<< HEAD
-            Context context =getApplicationContext();
-            SensorManager mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
-=======
-            private TextView lat=(TextView) findViewById(R.id.lat);
-            private TextView longi=(TextView) findViewById(R.id.longi);
+
+            Context context = getApplicationContext();
+            SensorManager mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+
+            private TextView lat = (TextView) findViewById(R.id.lat);
+            private TextView longi = (TextView) findViewById(R.id.longi);
 
             private TextView accXg = (TextView) findViewById(R.id.mitgX);
             private TextView accYg = (TextView) findViewById(R.id.mitgY);
@@ -116,86 +110,76 @@ public class DashboardActivity extends AppCompatActivity {
             private TextView accZ = (TextView) findViewById(R.id.ohnegZ);
 
             private TextView baro = (TextView) findViewById(R.id.pressureT);
-            private TextView height =  (TextView) findViewById(R.id.height);
+            private TextView height = (TextView) findViewById(R.id.height);
 
             private ImageView TrafficAcc = (ImageView) findViewById(R.id.AccTraffic);
             private ImageView trafficGps = (ImageView) findViewById(R.id.gpsTraffic);
             private ImageView trafficPress = (ImageView) findViewById(R.id.pressTraffic);
 
             @SuppressLint("SetTextI18n")//remove to find all texts unable to translate
->>>>>>> 6405807451c2f95dbc5393074c1b0cc7df1378a1
             @Override
             public void run() {
 
-                if(LocationService.singleton!=null && LocationService.singleton.ready){
-                    double[] d =LocationService.singleton.getGPS();
-                    String s="";
-                    s= String.format(Locale.getDefault(),"%31.12f",d[0]);
+                if (LocationService.singleton != null && LocationService.singleton.ready) {
+                    double[] d = LocationService.singleton.getGPS();
+                    String s = "";
+                    s = String.format(Locale.getDefault(), "%31.12f", d[0]);
                     lat.setText("latitude: " + s);
-                    s= String.format(Locale.getDefault(),"%31.12f",d[1]);
-                    longi.setText("longitude: "+ s);
+                    s = String.format(Locale.getDefault(), "%31.12f", d[1]);
+                    longi.setText("longitude: " + s);
 
-                    if(d[2]<20){
+                    if (d[2] < 20) {
                         trafficGps.setImageResource(R.drawable.dot_grun);
-                    }else if(d[2]<50){
+                    } else if (d[2] < 50) {
                         trafficGps.setImageResource(R.drawable.dot_orange);
-                    }else {
+                    } else {
                         trafficGps.setImageResource(R.drawable.dot_red);
                     }
-                }else{
-                lat.setText("LocationService not Active");
+                } else {
+                    lat.setText("LocationService not Active");
                 }
 
-                if(SensorService.singleton!=null&& SensorService.singleton.ready){
-<<<<<<< HEAD
+                if (SensorService.singleton != null && SensorService.singleton.ready) {
                     float[] f = SensorService.singleton.getAcc();
-                    tview.setText(Float.toString(f[0]));
-                    float [] mGravityValues = SensorService.singleton.getMag();
-=======
-
-                    float[] f = SensorService.singleton.getAcc_o_g();
+                    f = SensorService.singleton.getAcc_o_g();
                     accX.setText(" " + Float.toString(f[0]));
                     accY.setText(" " + Float.toString(f[1]));
                     accZ.setText(" " + Float.toString(f[2]));
 
                     f = SensorService.singleton.getAcc();
-                    accXg.setText(" " +Float.toString(f[0]));
-                    accYg.setText(" " +Float.toString(f[1]));
-                    accZg.setText(" " +Float.toString(f[2]));
+                    accXg.setText(" " + Float.toString(f[0]));
+                    accYg.setText(" " + Float.toString(f[1]));
+                    accZg.setText(" " + Float.toString(f[2]));
 
-                    makeTrafficLight((int)f[3],TrafficAcc);
+                    makeTrafficLight((int) f[3], TrafficAcc);
 
 
                     float[] pressure = SensorService.singleton.getPress();
-                    baro.setText("Luftdruck: "+Float.toString(pressure[0]));
-                    height.setText("Höhe (ca.): "+pressure[1]);
-                    makeTrafficLight((int)pressure[2],trafficPress);
+                    baro.setText("Luftdruck: " + Float.toString(pressure[0]));
+                    height.setText("Höhe (ca.): " + pressure[1]);
+                    makeTrafficLight((int) pressure[2], trafficPress);
 
 
->>>>>>> 6405807451c2f95dbc5393074c1b0cc7df1378a1
-                }else{
+                } else {
                     accXg.setText("SensorService not Active");
                 }
-<<<<<<< HEAD
-                timerHandler.postDelayed(updater,1000);
+                timerHandler.postDelayed(updater, 1000);
 
-                boolean success = SensorService.singleton.getRotMat();
+                /*boolean success = SensorService.singleton.getRotMat();
                 if(success) {
                     float [] orientationValues = new float[3];
                     //SensorService.singleton.mSensorManager.getOrientation()
-                }
-=======
-                if(!kill)
-                    timerHandler.postDelayed(updater,64);//15 frames right now
->>>>>>> 6405807451c2f95dbc5393074c1b0cc7df1378a1
+                }*/
+                if (!kill)
+                    timerHandler.postDelayed(updater, 64);//15 frames right now
             }
         };
 
         timerHandler.post(updater);
     }
 
-    private void makeTrafficLight(int a, ImageView image){
-        switch(a){
+    private void makeTrafficLight(int a, ImageView image) {
+        switch (a) {
             case 1:
                 image.setImageResource(R.drawable.dot_red);
                 break;
@@ -208,25 +192,25 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-    private void ClickListeners(){
+    private void ClickListeners() {
         final FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(SensorService.singleton.logging){
-                    SensorService.singleton.logging=false;
-                    LocationService.singleton.logging=false;
+                if (SensorService.singleton.logging) {
+                    SensorService.singleton.logging = false;
+                    LocationService.singleton.logging = false;
                     fab.setImageResource(android.R.drawable.ic_menu_edit);
-                }else{
-                    SensorService.singleton.logging=true;
-                    LocationService.singleton.logging=true;
+                } else {
+                    SensorService.singleton.logging = true;
+                    LocationService.singleton.logging = true;
                     fab.setImageResource(android.R.drawable.ic_media_pause);
                 }
             }
         });
-        findViewById(R.id.gps).setOnClickListener(new View.OnClickListener(){
+        findViewById(R.id.gps).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(activity,
                         Pair.create(findViewById(R.id.Headline), "testText"));
 
@@ -234,25 +218,25 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(intent, options.toBundle());
             }
         });
-        findViewById(R.id.accelerationSpeed).setOnClickListener(new View.OnClickListener(){
+        findViewById(R.id.accelerationSpeed).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(activity,
-                        Pair.create(findViewById(R.id.headlineAS),"head2"),
-                        Pair.create(findViewById(R.id.accX),"accX"),
-                        Pair.create(findViewById(R.id.accY),"accY"),
-                        Pair.create(findViewById(R.id.accZ),"accZ"),
-                        Pair.create(findViewById(R.id.mitg),"mitG"),
-                        Pair.create(findViewById(R.id.ohneG),"ohneG"),
-                        Pair.create(findViewById(R.id.mitgX),"mitgX"),
-                        Pair.create(findViewById(R.id.mitgY),"mitgY"),
-                        Pair.create(findViewById(R.id.mitgZ),"mitgZ"),
-                        Pair.create(findViewById(R.id.ohnegX),"ohnegX"),
-                        Pair.create(findViewById(R.id.ohnegY),"ohnegY"),
-                        Pair.create(findViewById(R.id.ohnegZ),"ohnegZ"),
-                        Pair.create(findViewById(R.id.AccTraffic),"accTraffic"));
+                        Pair.create(findViewById(R.id.headlineAS), "head2"),
+                        Pair.create(findViewById(R.id.accX), "accX"),
+                        Pair.create(findViewById(R.id.accY), "accY"),
+                        Pair.create(findViewById(R.id.accZ), "accZ"),
+                        Pair.create(findViewById(R.id.mitg), "mitG"),
+                        Pair.create(findViewById(R.id.ohneG), "ohneG"),
+                        Pair.create(findViewById(R.id.mitgX), "mitgX"),
+                        Pair.create(findViewById(R.id.mitgY), "mitgY"),
+                        Pair.create(findViewById(R.id.mitgZ), "mitgZ"),
+                        Pair.create(findViewById(R.id.ohnegX), "ohnegX"),
+                        Pair.create(findViewById(R.id.ohnegY), "ohnegY"),
+                        Pair.create(findViewById(R.id.ohnegZ), "ohnegZ"),
+                        Pair.create(findViewById(R.id.AccTraffic), "accTraffic"));
                 Intent intent = new Intent(activity, accelo_speed_Activity.class);
-                startActivity(intent,options.toBundle());
+                startActivity(intent, options.toBundle());
             }
         });
     }
@@ -263,20 +247,6 @@ public class DashboardActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
         return true;
     }
-<<<<<<< HEAD
-    /*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-=======
 
     //If MainActivity is destroyed before App is suspended ( zb. because we are in another Activty real long) our services get destrpyed.//TODO Check
     @Override
@@ -289,7 +259,6 @@ public class DashboardActivity extends AppCompatActivity {
         Log.d("DashboardActivity","Activity has been destroyed");
         super.onDestroy();
     }
->>>>>>> 6405807451c2f95dbc5393074c1b0cc7df1378a1
 
     @Override
     public void onPause(){
@@ -303,17 +272,6 @@ public class DashboardActivity extends AppCompatActivity {
         Update();
         super.onResume();
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -335,3 +293,29 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 }
+    /*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+      }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+}*/
