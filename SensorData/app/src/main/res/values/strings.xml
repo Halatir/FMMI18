@@ -12,9 +12,15 @@
     <string name="nav_hader_desc">Navigation header</string>
     <string name="title_activity_maptest">maptest</string>
     <string name="title_activity_maps">Map</string>
+<<<<<<< HEAD
     <string name="acceleration">Beschleunigung</string>
     <string name="travel">Fahrzeit</string>
     <string name="route">Strecke</string>
     <string name="altitude">Höhenmeter</string>
     <string name="direction">Fahrtrichtung</string>
+=======
+    <string name="title_activity_accelo_speed_">accelo_speed_Activity</string>
+
+
+>>>>>>> 6405807451c2f95dbc5393074c1b0cc7df1378a1
 </resources>
