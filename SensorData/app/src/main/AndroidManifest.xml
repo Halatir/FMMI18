@@ -32,7 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".gps_large_Activity" />
+        <activity
+            android:name=".gps_large_Activity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <service
             android:name=".SensorService"
