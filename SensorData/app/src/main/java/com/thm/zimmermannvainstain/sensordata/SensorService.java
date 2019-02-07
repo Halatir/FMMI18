@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 
 import java.util.ArrayList;
 
@@ -18,19 +20,19 @@ public class SensorService extends Service implements SensorEventListener {
 
     public static SensorService singleton;
 
-    public  SensorManager mSensorManager;
-
+    private  SensorManager mSensorManager;
     public boolean ready = false;
     Context context;
 
     private float[] Acc = {0.0f,0.0f,0.0f,0.0f};
     private float[] Acc_o_g = {0.0f,0.0f,0.0f};
     private float[] Gyr = {0.0f,0.0f,0.0f};
-
-    private float[] Mag = new float[3];
-    private boolean RotMat;
-
     private float[] pressure = {0.0f,0.0f,0.0f};
+    private float[] gravity = new float[3];
+
+    private float[] rotationMatrix = new float[9];
+    private float lastDirectionInDegrees = 0f;
+    private RotateAnimation rotateAnimation;
 
     //TODO not locked correctly
     public long AccTimeStamp = 0;
@@ -54,6 +56,7 @@ public class SensorService extends Service implements SensorEventListener {
 
         context= getApplicationContext();
 
+        mSensorManager = (SensorManager)context.getSystemService(context.SENSOR_SERVICE);
         Sensor m_Accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Sensor m_Gyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         Sensor m_Barometer = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
@@ -95,10 +98,7 @@ public class SensorService extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float[] mAccelerationValues = new float [3];
-        float[] mGravityValues = new float [3];
-        float[] mRotationMatrix=new float[9];
-        String log ="";
+        String log="";
 
         //event.timestamp does not return utc time, but time since last systemboot. it is easyer to get current time when called. TODO: Berechne UTC von event.timestamp
         long l= System.currentTimeMillis();
@@ -116,7 +116,27 @@ public class SensorService extends Service implements SensorEventListener {
                         MagLog.clear();
                     }
                 }
+                setMag(event.values.clone());
                 //float[] f = {event.values[0], event.values[1],event.values[2],event.accuracy};
+                boolean success = SensorManager.getRotationMatrix(
+                        rotationMatrix, null, Acc,
+                        gravity);
+                if(success) {
+                    float[] orientationValues = new float[3];
+                    SensorManager.getOrientation(rotationMatrix,
+                            orientationValues);
+                    float azimuth = (float) Math.toDegrees(
+                            -orientationValues[0]);
+                    rotateAnimation = new
+                            RotateAnimation(
+                            lastDirectionInDegrees, azimuth,
+                            Animation.RELATIVE_TO_SELF, 0.5f,
+                            Animation.RELATIVE_TO_SELF, 0.5f);
+                    rotateAnimation.setDuration(50);
+                    rotateAnimation.setFillAfter(true);
+
+                    lastDirectionInDegrees = azimuth;
+                }
                 break;
             case Sensor.TYPE_ACCELEROMETER:
                 if(logging){
@@ -229,4 +249,20 @@ public class SensorService extends Service implements SensorEventListener {
         }
     }
 
+    public void setMag(float[] f){
+        synchronized (gravity){
+            gravity = f;
+        }
+    }
+
+    public float[] getMag(){
+        synchronized (gravity){
+            return gravity;
+        }
+    }
+
+
+    public RotateAnimation getRotation(){
+        return rotateAnimation;
+    }
 }

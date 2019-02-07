@@ -3,10 +3,16 @@ package com.thm.zimmermannvainstain.sensordata;
 import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,13 +25,39 @@ public class gps_large_Activity extends AppCompatActivity {
     final Handler timerHandler = new Handler();
     Runnable updater;
     private boolean kill = false;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps_large_);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
         Update();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        String msg = menuItem.toString() + " was clicked";
+                        Log.i("menuitem", msg);
+
+                        return true;
+                    }
+                });
     }
 
     void Update() {
@@ -85,5 +117,14 @@ public class gps_large_Activity extends AppCompatActivity {
         kill=false;
         Update();
         super.onResume();
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

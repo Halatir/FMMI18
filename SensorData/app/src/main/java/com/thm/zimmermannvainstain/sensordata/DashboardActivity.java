@@ -23,6 +23,7 @@ import android.util.Pair;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class DashboardActivity extends AppCompatActivity {
     final Handler timerHandler = new Handler();
 
     private DrawerLayout mDrawerLayout;
+    private ImageView imageViewCompass;
 
     private ImageView mImageViewCompass;
 
@@ -50,7 +52,14 @@ public class DashboardActivity extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
+<<<<<<< HEAD
         activity = this;
+=======
+        imageViewCompass=(ImageView)findViewById(
+                R.id.compass);
+
+        activity =this;
+>>>>>>> 8420ce8953d50fb8f012ade79619f4b3e42d95d0
 
         ActivityCompat.requestPermissions(activity,
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -115,6 +124,11 @@ public class DashboardActivity extends AppCompatActivity {
             private ImageView TrafficAcc = (ImageView) findViewById(R.id.AccTraffic);
             private ImageView trafficGps = (ImageView) findViewById(R.id.gpsTraffic);
             private ImageView trafficPress = (ImageView) findViewById(R.id.pressTraffic);
+            private ImageView trafficMag = (ImageView) findViewById(R.id.MagTraffic);
+
+            private TextView magX = (TextView) findViewById(R.id.magX);
+            private TextView magY = (TextView) findViewById(R.id.magY);
+            private TextView magZ = (TextView) findViewById(R.id.magZ);
 
             @SuppressLint("SetTextI18n")//remove to find all texts unable to translate
             @Override
@@ -159,6 +173,13 @@ public class DashboardActivity extends AppCompatActivity {
                     height.setText("Höhe (ca.): " + pressure[1]);
                     makeTrafficLight((int) pressure[2], trafficPress);
 
+                    RotateAnimation rotateAnimation = SensorService.singleton.getRotation();
+                    imageViewCompass.setAnimation(rotateAnimation);
+
+                    float[] magneto = SensorService.singleton.getMag();
+                    magX.setText(" " + Float.toString(magneto[0]));
+                    magY.setText(" " + Float.toString(magneto[1]));
+                    magZ.setText(" " + Float.toString(magneto[2]));
 
                 } else {
                     accXg.setText("SensorService not Active");

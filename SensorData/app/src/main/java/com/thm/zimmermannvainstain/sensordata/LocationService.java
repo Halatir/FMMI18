@@ -56,7 +56,9 @@ public class LocationService extends Service implements LocationListener {
         if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
             //TODO: Inform User about not granded Permission, and Ask Again
         }else{
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this, looper);
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this, looper);
+            }
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 0, this, looper);
         }
         ready = true;
