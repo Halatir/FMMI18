@@ -55,6 +55,7 @@ public class SensorService extends Service implements SensorEventListener {
         }
 
         context= getApplicationContext();
+        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
         mSensorManager = (SensorManager)context.getSystemService(context.SENSOR_SERVICE);
         Sensor m_Accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);

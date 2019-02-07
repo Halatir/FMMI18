@@ -12,15 +12,6 @@ Traffic Color Palette: https://www.color-hex.com/color-palette/35021
 
 Export Icon: https://www.flaticon.com/free-icon/export-file_1236616#term=export&page=1&position=12
 
-## Images
-
-https://pixabay.com/de/compass-rose-windrose-navigation-155737/
-
-## Libraries
-
-Graph Library: 
- 'com.jjoe64:graphview:4.2.2'
-
 ## To Dos
 
 - [x] start sensor service on start
@@ -37,6 +28,11 @@ Graph Library:
     - [x] Luftdruck
     - [ ] Rotation
 
+Graph Library: 
+ 'com.jjoe64:graphview:4.2.2'
 
 Timestamp richtig ausrechnen
 aufzeichnungsbutton tauschen für feedback in subactivitys
+Kompass? Flüssiger
+Gyroscop
+

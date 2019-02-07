@@ -52,14 +52,10 @@ public class DashboardActivity extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
-<<<<<<< HEAD
-        activity = this;
-=======
         imageViewCompass=(ImageView)findViewById(
                 R.id.compass);
 
         activity =this;
->>>>>>> 8420ce8953d50fb8f012ade79619f4b3e42d95d0
 
         ActivityCompat.requestPermissions(activity,
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -154,8 +150,7 @@ public class DashboardActivity extends AppCompatActivity {
                 }
 
                 if (SensorService.singleton != null && SensorService.singleton.ready) {
-                    float[] f = SensorService.singleton.getAcc();
-                    f = SensorService.singleton.getAcc_o_g();
+                    float[] f = SensorService.singleton.getAcc_o_g();
                     accX.setText(" " + Float.toString(f[0]));
                     accY.setText(" " + Float.toString(f[1]));
                     accZ.setText(" " + Float.toString(f[2]));
@@ -184,13 +179,6 @@ public class DashboardActivity extends AppCompatActivity {
                 } else {
                     accXg.setText("SensorService not Active");
                 }
-                timerHandler.postDelayed(updater, 1000);
-
-                /*boolean success = SensorService.singleton.getRotMat();
-                if(success) {
-                    float [] orientationValues = new float[3];
-                    //SensorService.singleton.mSensorManager.getOrientation()
-                }*/
                 if (!kill)
                     timerHandler.postDelayed(updater, 64);//15 frames right now
             }
