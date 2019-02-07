@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 
 import java.util.ArrayList;
 
@@ -26,6 +28,11 @@ public class SensorService extends Service implements SensorEventListener {
     private float[] Acc_o_g = {0.0f,0.0f,0.0f};
     private float[] Gyr = {0.0f,0.0f,0.0f};
     private float[] pressure = {0.0f,0.0f,0.0f};
+    private float[] gravity = new float[3];
+
+    private float[] rotationMatrix = new float[9];
+    private float lastDirectionInDegrees = 0f;
+    private RotateAnimation rotateAnimation;
 
     //TODO not locked correctly
     public long AccTimeStamp = 0;
@@ -109,7 +116,27 @@ public class SensorService extends Service implements SensorEventListener {
                         MagLog.clear();
                     }
                 }
+                setMag(event.values.clone());
                 //float[] f = {event.values[0], event.values[1],event.values[2],event.accuracy};
+                boolean success = SensorManager.getRotationMatrix(
+                        rotationMatrix, null, Acc,
+                        gravity);
+                if(success) {
+                    float[] orientationValues = new float[3];
+                    SensorManager.getOrientation(rotationMatrix,
+                            orientationValues);
+                    float azimuth = (float) Math.toDegrees(
+                            -orientationValues[0]);
+                    rotateAnimation = new
+                            RotateAnimation(
+                            lastDirectionInDegrees, azimuth,
+                            Animation.RELATIVE_TO_SELF, 0.5f,
+                            Animation.RELATIVE_TO_SELF, 0.5f);
+                    rotateAnimation.setDuration(50);
+                    rotateAnimation.setFillAfter(true);
+
+                    lastDirectionInDegrees = azimuth;
+                }
                 break;
             case Sensor.TYPE_ACCELEROMETER:
                 if(logging){
@@ -220,5 +247,22 @@ public class SensorService extends Service implements SensorEventListener {
         synchronized (Gyr){
             Gyr = f;
         }
+    }
+
+    public void setMag(float[] f){
+        synchronized (gravity){
+            gravity = f;
+        }
+    }
+
+    public float[] getMag(){
+        synchronized (gravity){
+            return gravity;
+        }
+    }
+
+
+    public RotateAnimation getRotation(){
+        return rotateAnimation;
     }
 }
