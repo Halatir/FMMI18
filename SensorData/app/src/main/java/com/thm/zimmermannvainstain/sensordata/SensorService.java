@@ -26,9 +26,9 @@ public class SensorService extends Service implements SensorEventListener {
 
     private float[] Acc = {0.0f,0.0f,0.0f,0.0f};
     private float[] Acc_o_g = {0.0f,0.0f,0.0f};
-    private float[] Gyr = new float[4];
+    private float[] Gyr = {0.0f,0.0f,0.0f};
     private float[] pressure = {0.0f,0.0f,0.0f};
-    private float[] gravity = new float[4];
+    private float[] gravity = new float[3];
 
     private float[] rotationMatrix = new float[9];
     private float lastDirectionInDegrees = 0f;
@@ -39,14 +39,12 @@ public class SensorService extends Service implements SensorEventListener {
     private float light =0.0f;
 
     public boolean logging = false;
-    private static int bufferAmount = 500;
+    private static int bufferAmount = 1000;
     private ArrayList AccLog = new ArrayList(bufferAmount);
     private ArrayList GyrLog = new ArrayList(bufferAmount);
     private ArrayList BaroLog = new ArrayList(bufferAmount);
     private ArrayList LightLog = new ArrayList(bufferAmount);
     private ArrayList MagLog = new ArrayList(bufferAmount);
-
-    private long timeFromUTCtillBoot =-1;
 
     @Override
     public int onStartCommand(Intent intent,int flags, int startId){
@@ -100,10 +98,10 @@ public class SensorService extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        //This might not be perfectly accurate.
-        long l=System.currentTimeMillis();
-
         String log="";
+
+        //event.timestamp does not return utc time, but time since last systemboot. it is easyer to get current time when called. TODO: Berechne UTC von event.timestamp
+        long l= System.currentTimeMillis();
         int i = event.sensor.getType();
 
         switch(i){
@@ -118,9 +116,9 @@ public class SensorService extends Service implements SensorEventListener {
                         MagLog.clear();
                     }
                 }
-                float[] f = {event.values[0], event.values[1],event.values[2],event.accuracy};
-                //setMag(event.values.clone());
-                setMag(f);
+                float[] magneto = {event.values[0], event.values[1],event.values[2],event.accuracy};
+                setMag(magneto);
+                //float[] f = {event.values[0], event.values[1],event.values[2],event.accuracy};
                 boolean success = SensorManager.getRotationMatrix(
                         rotationMatrix, null, Acc,
                         gravity);
@@ -152,16 +150,15 @@ public class SensorService extends Service implements SensorEventListener {
                         AccLog.clear();
                     }
                 }
-                float[] a = {event.values[0], event.values[1],event.values[2],event.accuracy};
+                float[] f = {event.values[0], event.values[1],event.values[2],event.accuracy};
                 AccTimeStamp = l;
-                setAcc(a);
+                setAcc(f);
                 break;
             case Sensor.TYPE_LINEAR_ACCELERATION:
                 setAcc_o_g((event.values));
                 break;
             case Sensor.TYPE_GYROSCOPE:
-                float[] g = {event.values[0], event.values[1],event.values[2],event.accuracy};
-                setGyr(g);
+                setGyr(event.values);
                 if(logging){
                     log = Long.toString(l) + "," + Float.toString(event.values[0]) + "," +
                             Float.toString(event.values[1]) + "," + Float.toString(event.values[2]) + "," + Float.toString(event.accuracy) + "\n\r";
@@ -264,6 +261,7 @@ public class SensorService extends Service implements SensorEventListener {
             return gravity;
         }
     }
+
 
     public RotateAnimation getRotation(){
         return rotateAnimation;

@@ -3,16 +3,19 @@ package com.thm.zimmermannvainstain.sensordata;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.SensorManager;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +28,8 @@ import android.view.MenuItem;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.model.Dash;
 
 import java.util.Locale;
 
@@ -62,8 +67,16 @@ public class DashboardActivity extends AppCompatActivity {
 
         sensorIntent = new Intent(this, SensorService.class);
         gpsIntent = new Intent(this, LocationService.class);
-        startService(sensorIntent);
-        startService(gpsIntent);
+        if(!isMyServiceRunning(SensorService.class)) {
+            startService(sensorIntent);
+        } else {
+            Log.i("service", "SensorService is already running");
+        }
+        if(!isMyServiceRunning(LocationService.class)) {
+            startService(gpsIntent);
+        } else {
+            Log.i("service", "LocationService is already running");
+        }
 
         ClickListeners();
         Update();
@@ -77,11 +90,31 @@ public class DashboardActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
-
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-                        String msg = menuItem.toString() + " was clicked";
-                        Log.i("menuitem", msg);
+                        Intent intent = null;
+                        switch(menuItem.getItemId()){
+                            case R.id.dashboard:
+                                intent = new Intent(activity, DashboardActivity.class);
+                                break;
+                            case R.id.speed:
+                                intent = new Intent(activity, gps_large_Activity.class);
+                                break;
+                            case R.id.acceleration:
+                                intent = new Intent(activity, accelo_speed_Activity.class);
+                                break;
+                            case R.id.direction:
+                                //intent = new Intent(activity, accelo_speed_Activity.class);
+                                break;
+                            case R.id.route:
+                                //intent = new Intent(activity, accelo_speed_Activity.class);
+                                break;
+                            case R.id.altitude:
+                                //intent = new Intent(activity, accelo_speed_Activity.class);
+                        }
+                        if(intent != null) {
+                            startActivity(intent);
+                        } else {
+                            Log.e("intent", "no Intent available");
+                        }
 
                         return true;
                     }
@@ -95,8 +128,6 @@ public class DashboardActivity extends AppCompatActivity {
 
         updater = new Runnable() {
 
-            Context context = getApplicationContext();
-
             private TextView lat = (TextView) findViewById(R.id.lat);
             private TextView longi = (TextView) findViewById(R.id.longi);
 
@@ -108,10 +139,6 @@ public class DashboardActivity extends AppCompatActivity {
             private TextView accY = (TextView) findViewById(R.id.ohnegY);
             private TextView accZ = (TextView) findViewById(R.id.ohnegZ);
 
-            private TextView gyrX = (TextView) findViewById(R.id.gyrX);
-            private TextView gyrY = (TextView) findViewById(R.id.gyrY);
-            private TextView gyrZ = (TextView) findViewById(R.id.gyrZ);
-
             private TextView baro = (TextView) findViewById(R.id.pressureT);
             private TextView height = (TextView) findViewById(R.id.height);
 
@@ -119,7 +146,6 @@ public class DashboardActivity extends AppCompatActivity {
             private ImageView trafficGps = (ImageView) findViewById(R.id.gpsTraffic);
             private ImageView trafficPress = (ImageView) findViewById(R.id.pressTraffic);
             private ImageView trafficMag = (ImageView) findViewById(R.id.MagTraffic);
-            private ImageView trafficGyr = (ImageView) findViewById(R.id.gyrTraffic);
 
             private TextView magX = (TextView) findViewById(R.id.magX);
             private TextView magY = (TextView) findViewById(R.id.magY);
@@ -161,6 +187,7 @@ public class DashboardActivity extends AppCompatActivity {
 
                     makeTrafficLight((int) f[3], TrafficAcc);
 
+
                     float[] pressure = SensorService.singleton.getPress();
                     baro.setText("Luftdruck: " + Float.toString(pressure[0]));
                     height.setText("Höhe (ca.): " + pressure[1]);
@@ -173,13 +200,6 @@ public class DashboardActivity extends AppCompatActivity {
                     magX.setText(" " + Float.toString(magneto[0]));
                     magY.setText(" " + Float.toString(magneto[1]));
                     magZ.setText(" " + Float.toString(magneto[2]));
-                    makeTrafficLight((int)magneto[3],trafficMag);
-
-                    float[] gyro = SensorService.singleton.getGyr();
-                    gyrX.setText(" " + Float.toString(gyro[0]));
-                    gyrY.setText(" " + Float.toString(gyro[1]));
-                    gyrZ.setText(" " + Float.toString(gyro[2]));
-                    makeTrafficLight((int)gyro[3],trafficGyr);
 
 
                 } else {
@@ -254,12 +274,6 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(intent, options.toBundle());
             }
         });
-        findViewById(R.id.magneto).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                //Intent intent = new Intent(activity, )
-            }
-        });
     }
 
     @Override
@@ -313,21 +327,6 @@ public class DashboardActivity extends AppCompatActivity {
             // permissions this app might request.
         }
     }
-}
-    /*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-      }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -338,5 +337,13 @@ public class DashboardActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-}*/
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+}

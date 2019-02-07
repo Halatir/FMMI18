@@ -1,6 +1,8 @@
 package com.thm.zimmermannvainstain.sensordata;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +32,7 @@ public class accelo_speed_Activity extends AppCompatActivity {
     private LineGraphSeries<DataPoint> mSeries;
     private LineGraphSeries<DataPoint> mSeriesY;
     private LineGraphSeries<DataPoint> mSeriesZ;
+    private Activity activity;
 
     private float maxAcceleration = 0.0f;
     private String maxTimestamp = "00.00.0000";
@@ -45,6 +48,7 @@ public class accelo_speed_Activity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawerLayout = findViewById(R.id.drawer_layout);
+        activity = this;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,11 +70,23 @@ public class accelo_speed_Activity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
-
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-                        String msg = menuItem.toString() + " was clicked";
-                        Log.i("menuitem", msg);
+                        Intent intent = null;
+                        switch(menuItem.getItemId()){
+                            case R.id.dashboard:
+                                intent = new Intent(activity, DashboardActivity.class);
+                                break;
+                            case R.id.speed:
+                                intent = new Intent(activity, gps_large_Activity.class);
+                                break;
+                            case R.id.acceleration:
+                                intent = new Intent(activity, accelo_speed_Activity.class);
+                                break;
+                        }
+                        if(intent != null) {
+                            startActivity(intent);
+                        } else {
+                            Log.e("intent", "no Intent available");
+                        }
 
                         return true;
                     }
