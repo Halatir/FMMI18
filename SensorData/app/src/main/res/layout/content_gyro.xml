@@ -5,7 +5,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".GyroActivity"
+    tools:context=".gyroscope_Activity"
     tools:showIn="@layout/activity_gyro">
 
+    <ImageView
+        android:id="@+id/gyrTraffic"
+        android:layout_width="29dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="16dp"
+        android:transitionName="magTraffic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gyroHead"
+        app:srcCompat="@drawable/dot_red" />
+
+    <TextView
+        android:id="@+id/gyroHead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Gyroskop"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/gyrDescY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Y:"
+        android:transitionName="accY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gyrDescX" />
+
+    <TextView
+        android:id="@+id/gyrDescX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="X:"
+        android:transitionName="magXX"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gyroHead" />
+
+    <TextView
+        android:id="@+id/gyrDescZ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Z:"
+        android:transitionName="magZ"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gyrDescY" />
+
+    <TextView
+        android:id="@+id/gyrX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="X:"
+        android:transitionName="magXX"
+        app:layout_constraintStart_toEndOf="@+id/gyrDescX"
+        app:layout_constraintTop_toTopOf="@+id/gyrDescX" />
+
+    <TextView
+        android:id="@+id/gyrY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="Y:"
+        android:transitionName="accY"
+        app:layout_constraintStart_toEndOf="@+id/gyrDescY"
+        app:layout_constraintTop_toBottomOf="@+id/gyrX" />
+
+    <TextView
+        android:id="@+id/gyrZ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="Z:"
+        android:transitionName="magZ"
+        app:layout_constraintStart_toEndOf="@+id/gyrDescZ"
+        app:layout_constraintTop_toBottomOf="@+id/gyrY" />
 </android.support.constraint.ConstraintLayout>

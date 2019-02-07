@@ -94,7 +94,6 @@ public class accelo_speed_Activity extends AppCompatActivity {
 
     }
 
-    //TODO Refactor OnPause OnResume
     Runnable updater;
     private boolean kill=false;
     void Update() {

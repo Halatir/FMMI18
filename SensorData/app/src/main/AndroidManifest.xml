@@ -70,7 +70,7 @@
             android:label="@string/title_activity_accelo_speed_"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".GyroActivity"
+            android:name=".gyroscope_Activity"
             android:label="@string/title_activity_gyro"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

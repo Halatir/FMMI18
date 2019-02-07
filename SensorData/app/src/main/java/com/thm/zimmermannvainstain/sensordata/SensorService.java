@@ -26,9 +26,9 @@ public class SensorService extends Service implements SensorEventListener {
 
     private float[] Acc = {0.0f,0.0f,0.0f,0.0f};
     private float[] Acc_o_g = {0.0f,0.0f,0.0f};
-    private float[] Gyr = {0.0f,0.0f,0.0f};
+    private float[] Gyr = new float[4];
     private float[] pressure = {0.0f,0.0f,0.0f};
-    private float[] gravity = new float[3];
+    private float[] gravity = new float[4];
 
     private float[] rotationMatrix = new float[9];
     private float lastDirectionInDegrees = 0f;
@@ -118,7 +118,6 @@ public class SensorService extends Service implements SensorEventListener {
                 }
                 float[] magneto = {event.values[0], event.values[1],event.values[2],event.accuracy};
                 setMag(magneto);
-                //float[] f = {event.values[0], event.values[1],event.values[2],event.accuracy};
                 boolean success = SensorManager.getRotationMatrix(
                         rotationMatrix, null, Acc,
                         gravity);
@@ -158,7 +157,8 @@ public class SensorService extends Service implements SensorEventListener {
                 setAcc_o_g((event.values));
                 break;
             case Sensor.TYPE_GYROSCOPE:
-                setGyr(event.values);
+                float[] g = {event.values[0],event.values[1],event.values[2],event.accuracy};
+                setGyr(g);
                 if(logging){
                     log = Long.toString(l) + "," + Float.toString(event.values[0]) + "," +
                             Float.toString(event.values[1]) + "," + Float.toString(event.values[2]) + "," + Float.toString(event.accuracy) + "\n\r";

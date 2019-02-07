@@ -32,7 +32,10 @@ Graph Library:
  'com.jjoe64:graphview:4.2.2'
 
 aufzeichnungsbutton tauschen für feedback in subactivitys
-Kompass? Flüssiger
 Gyroscop, Magneto single sides
 Log on Stop of logging
+höhe via GPS
+
+start/stop
+kill Service correct?
 

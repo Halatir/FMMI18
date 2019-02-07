@@ -146,10 +146,15 @@ public class DashboardActivity extends AppCompatActivity {
             private ImageView trafficGps = (ImageView) findViewById(R.id.gpsTraffic);
             private ImageView trafficPress = (ImageView) findViewById(R.id.pressTraffic);
             private ImageView trafficMag = (ImageView) findViewById(R.id.MagTraffic);
+            private ImageView trafficGyr = (ImageView) findViewById(R.id.gyrTraffic);
 
             private TextView magX = (TextView) findViewById(R.id.magX);
             private TextView magY = (TextView) findViewById(R.id.magY);
             private TextView magZ = (TextView) findViewById(R.id.magZ);
+
+            private TextView gyrX = (TextView) findViewById(R.id.gyrX);
+            private TextView gyrY = (TextView) findViewById(R.id.gyrY);
+            private TextView gyrZ = (TextView) findViewById(R.id.gyrZ);
 
             @SuppressLint("SetTextI18n")//remove to find all texts unable to translate
             @Override
@@ -200,7 +205,13 @@ public class DashboardActivity extends AppCompatActivity {
                     magX.setText(" " + Float.toString(magneto[0]));
                     magY.setText(" " + Float.toString(magneto[1]));
                     magZ.setText(" " + Float.toString(magneto[2]));
+                    makeTrafficLight((int)magneto[3],trafficMag);
 
+                    float[] gyro = SensorService.singleton.getGyr();
+                    gyrX.setText(" " + Float.toString(gyro[0]));
+                    gyrY.setText(" " + Float.toString(gyro[1]));
+                    gyrZ.setText(" " + Float.toString(gyro[2]));
+                    makeTrafficLight((int)gyro[3],trafficGyr);
 
                 } else {
                     accXg.setText("SensorService not Active");
@@ -272,6 +283,13 @@ public class DashboardActivity extends AppCompatActivity {
                         Pair.create(findViewById(R.id.AccTraffic), "accTraffic"));
                 Intent intent = new Intent(activity, accelo_speed_Activity.class);
                 startActivity(intent, options.toBundle());
+            }
+        });
+        findViewById(R.id.Gyro).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(activity,gyroscope_Activity.class);
+                startActivity(intent);
             }
         });
     }
