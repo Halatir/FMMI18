@@ -28,11 +28,17 @@ public class SensorService extends Service implements SensorEventListener {
     private float[] Acc_o_g = {0.0f,0.0f,0.0f};
     private float[] Gyr = new float[4];
     private float[] pressure = {0.0f,0.0f,0.0f};
+<<<<<<< HEAD
     private float[] gravity = new float[4];
+=======
+    private float[] geo = new float[3];
+    private float[] lowMag = new float[3];
+    private float[] lowAcc = new float[3];
+>>>>>>> e47bca3b604ad73450d0a336a75bda17b3977465
 
-    private float[] rotationMatrix = new float[9];
     private float lastDirectionInDegrees = 0f;
     private RotateAnimation rotateAnimation;
+    private float smoothingFactor = 0.1f;
 
     //TODO not locked correctly
     public long AccTimeStamp = 0;
@@ -118,6 +124,7 @@ public class SensorService extends Service implements SensorEventListener {
                 }
                 float[] magneto = {event.values[0], event.values[1],event.values[2],event.accuracy};
                 setMag(magneto);
+<<<<<<< HEAD
                 boolean success = SensorManager.getRotationMatrix(
                         rotationMatrix, null, Acc,
                         gravity);
@@ -137,6 +144,9 @@ public class SensorService extends Service implements SensorEventListener {
 
                     lastDirectionInDegrees = azimuth;
                 }
+=======
+                lowMag = applyLowPassFilter(event.values.clone(), lowMag);
+>>>>>>> e47bca3b604ad73450d0a336a75bda17b3977465
                 break;
             case Sensor.TYPE_ACCELEROMETER:
                 if(logging){
@@ -152,6 +162,7 @@ public class SensorService extends Service implements SensorEventListener {
                 float[] f = {event.values[0], event.values[1],event.values[2],event.accuracy};
                 AccTimeStamp = l;
                 setAcc(f);
+                lowAcc = applyLowPassFilter(event.values.clone(),lowAcc);
                 break;
             case Sensor.TYPE_LINEAR_ACCELERATION:
                 setAcc_o_g((event.values));
@@ -197,6 +208,25 @@ public class SensorService extends Service implements SensorEventListener {
                     light = event.values[0];
                 }
                 break;
+        }
+        float R[] = new float[9];
+        float I[] = new float[9];
+        boolean success = SensorManager.getRotationMatrix(R, I, lowAcc, lowMag);
+        if(success) {
+            float[] orientationValues = new float[3];
+            SensorManager.getOrientation(R,orientationValues);
+            float newDirectionInDegrees = (float) Math.toDegrees(
+                    -orientationValues[0]);
+
+            rotateAnimation = new
+                    RotateAnimation(
+                    lastDirectionInDegrees, newDirectionInDegrees,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnimation.setDuration(50);
+            rotateAnimation.setFillAfter(true);
+
+            lastDirectionInDegrees = newDirectionInDegrees;
         }
     }
 
@@ -251,19 +281,28 @@ public class SensorService extends Service implements SensorEventListener {
     }
 
     public void setMag(float[] f){
-        synchronized (gravity){
-            gravity = f;
+        synchronized (geo){
+            geo = f;
         }
     }
 
     public float[] getMag(){
-        synchronized (gravity){
-            return gravity;
+        synchronized (geo){
+            return geo;
         }
     }
 
-
     public RotateAnimation getRotation(){
         return rotateAnimation;
+    }
+
+    //https://stackoverflow.com/questions/27846604/how-to-get-smooth-orientation-data-in-android
+    private float[] applyLowPassFilter(float[] input, float[] output) {
+        if ( output == null ) return input;
+
+        for ( int i=0; i<input.length; i++ ) {
+            output[i] = output[i] + smoothingFactor * (input[i] - output[i]);
+        }
+        return output;
     }
 }
