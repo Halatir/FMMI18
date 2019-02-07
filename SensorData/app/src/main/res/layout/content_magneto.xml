@@ -5,54 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".gyroscope_Activity"
-    tools:showIn="@layout/activity_gyro">
+    tools:context=".magnetoActivity"
+    tools:showIn="@layout/activity_magneto">
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph"
-        android:layout_width="match_parent"
-        android:layout_height="200dip"
+    <TextView
+        android:id="@+id/headlineMag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Magnetfeld:"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:transitionName="testText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gyrZ" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/gyrTraffic"
+        android:id="@+id/magTraffic"
         android:layout_width="29dp"
         android:layout_height="26dp"
         android:layout_marginEnd="16dp"
         android:transitionName="magTraffic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/gyroHead"
+        app:layout_constraintTop_toTopOf="@+id/headlineMag"
         app:srcCompat="@drawable/dot_red" />
 
     <TextView
-        android:id="@+id/gyroHead"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Gyroskop"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/gyrDescY"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Y:"
-        android:transitionName="accY"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gyrDescX" />
-
-    <TextView
-        android:id="@+id/gyrDescX"
+        android:id="@+id/magDescX"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -60,10 +41,21 @@
         android:text="X:"
         android:transitionName="magXX"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gyroHead" />
+        app:layout_constraintTop_toBottomOf="@+id/headlineMag" />
 
     <TextView
-        android:id="@+id/gyrDescZ"
+        android:id="@+id/magDescY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Y:"
+        android:transitionName="accY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/magX" />
+
+    <TextView
+        android:id="@+id/magDescZ"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -71,37 +63,50 @@
         android:text="Z:"
         android:transitionName="magZ"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gyrDescY" />
+        app:layout_constraintTop_toBottomOf="@+id/magY" />
 
     <TextView
-        android:id="@+id/gyrX"
+        android:id="@+id/magX"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:text="X:"
         android:transitionName="magXX"
-        app:layout_constraintStart_toEndOf="@+id/gyrDescX"
-        app:layout_constraintTop_toTopOf="@+id/gyrDescX" />
+        app:layout_constraintStart_toEndOf="@+id/magDescX"
+        app:layout_constraintTop_toTopOf="@+id/magDescX" />
 
     <TextView
-        android:id="@+id/gyrY"
+        android:id="@+id/magY"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:text="Y:"
         android:transitionName="accY"
-        app:layout_constraintStart_toEndOf="@+id/gyrDescY"
-        app:layout_constraintTop_toBottomOf="@+id/gyrX" />
+        app:layout_constraintStart_toEndOf="@+id/magDescY"
+        app:layout_constraintTop_toBottomOf="@+id/magX" />
 
     <TextView
-        android:id="@+id/gyrZ"
+        android:id="@+id/magZ"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:text="Z:"
         android:transitionName="magZ"
-        app:layout_constraintStart_toEndOf="@+id/gyrDescZ"
-        app:layout_constraintTop_toBottomOf="@+id/gyrY" />
+        app:layout_constraintStart_toEndOf="@+id/magDescZ"
+        app:layout_constraintTop_toBottomOf="@+id/magY" />
+
+    <ImageView
+        android:id="@+id/compass"
+        android:layout_width="225dp"
+        android:layout_height="225dp"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/compass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/magZ" />
 </android.support.constraint.ConstraintLayout>

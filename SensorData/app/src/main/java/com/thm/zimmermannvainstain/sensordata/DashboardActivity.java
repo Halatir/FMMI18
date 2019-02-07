@@ -43,8 +43,6 @@ public class DashboardActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ImageView imageViewCompass;
 
-    private ImageView mImageViewCompass;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +54,7 @@ public class DashboardActivity extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
-        imageViewCompass=(ImageView)findViewById(
-                R.id.compass);
+        imageViewCompass=(ImageView)findViewById(R.id.compass);
 
         activity =this;
 
@@ -67,6 +64,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         sensorIntent = new Intent(this, SensorService.class);
         gpsIntent = new Intent(this, LocationService.class);
+
         if(!isMyServiceRunning(SensorService.class)) {
             startService(sensorIntent);
         } else {
@@ -77,7 +75,6 @@ public class DashboardActivity extends AppCompatActivity {
         } else {
             Log.i("service", "LocationService is already running");
         }
-
         ClickListeners();
         Update();
 
@@ -93,22 +90,24 @@ public class DashboardActivity extends AppCompatActivity {
                         Intent intent = null;
                         switch(menuItem.getItemId()){
                             case R.id.dashboard:
-                                intent = new Intent(activity, DashboardActivity.class);
+                                //intent = new Intent(activity, DashboardActivity.class);
                                 break;
-                            case R.id.speed:
-                                intent = new Intent(activity, gps_large_Activity.class);
+                            case R.id.gps:
+                                intent = new Intent(activity, gpsActivity.class);
                                 break;
                             case R.id.acceleration:
                                 intent = new Intent(activity, accelo_speed_Activity.class);
                                 break;
-                            case R.id.direction:
-                                //intent = new Intent(activity, accelo_speed_Activity.class);
+                            case R.id.gyro:
+                                intent = new Intent(activity, gyroscope_Activity.class);
                                 break;
-                            case R.id.route:
-                                //intent = new Intent(activity, accelo_speed_Activity.class);
+                            case R.id.magneto:
+                                intent = new Intent(activity, magnetoActivity.class);
                                 break;
-                            case R.id.altitude:
-                                //intent = new Intent(activity, accelo_speed_Activity.class);
+                            case R.id.pressure:
+                                intent = new Intent(activity, pressureActivity.class);
+                                break;
+
                         }
                         if(intent != null) {
                             startActivity(intent);
@@ -156,11 +155,22 @@ public class DashboardActivity extends AppCompatActivity {
             private TextView gyrY = (TextView) findViewById(R.id.gyrY);
             private TextView gyrZ = (TextView) findViewById(R.id.gyrZ);
 
+            private boolean once =false;
+
             @SuppressLint("SetTextI18n")//remove to find all texts unable to translate
             @Override
             public void run() {
 
                 if (LocationService.singleton != null && LocationService.singleton.ready) {
+                    if(!once){
+                        final FloatingActionButton fab = findViewById(R.id.fab);
+                        if(SensorService.singleton.ready && SensorService.singleton.logging){
+                            fab.setImageResource(android.R.drawable.ic_media_pause);
+                        }else{
+                            fab.setImageResource(android.R.drawable.ic_menu_edit);
+                        }
+                        once=true;
+                    }
                     double[] d = LocationService.singleton.getGPS();
                     String s = "";
                     s = String.format(Locale.getDefault(), "%31.12f", d[0]);
@@ -244,8 +254,8 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (SensorService.singleton.logging) {
-                    SensorService.singleton.logging = false;
-                    LocationService.singleton.logging = false;
+                    SensorService.singleton.stopLogging();
+                    LocationService.singleton.stopLogging();
                     fab.setImageResource(android.R.drawable.ic_menu_edit);
                 } else {
                     SensorService.singleton.logging = true;
@@ -254,13 +264,14 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         });
+
         findViewById(R.id.gps).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(activity,
                         Pair.create(findViewById(R.id.Headline), "testText"));
 
-                Intent intent = new Intent(activity, gps_large_Activity.class);
+                Intent intent = new Intent(activity, gpsActivity.class);
                 startActivity(intent, options.toBundle());
             }
         });
@@ -289,6 +300,20 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Intent intent = new Intent(activity,gyroscope_Activity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.pressure).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(activity,pressureActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.magneto).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(activity,magnetoActivity.class);
                 startActivity(intent);
             }
         });

@@ -3,26 +3,24 @@ package com.thm.zimmermannvainstain.sensordata;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.LoaderManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ImageView;
+import android.view.View;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.Locale;
 
-public class gps_large_Activity extends AppCompatActivity {
+public class gpsActivity extends AppCompatActivity {
 
     final Handler timerHandler = new Handler();
     Runnable updater;
@@ -33,9 +31,10 @@ public class gps_large_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gps_large_);
+        setContentView(R.layout.activity_gps);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -43,6 +42,27 @@ public class gps_large_Activity extends AppCompatActivity {
         activity = this;
 
         Update();
+
+        final FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SensorService.singleton.logging) {
+                    SensorService.singleton.stopLogging();
+                    LocationService.singleton.stopLogging();
+                    fab.setImageResource(android.R.drawable.ic_menu_edit);
+                } else {
+                    SensorService.singleton.logging = true;
+                    LocationService.singleton.logging = true;
+                    fab.setImageResource(android.R.drawable.ic_media_pause);
+                }
+            }
+        });
+        if(SensorService.singleton.ready && SensorService.singleton.logging){
+            fab.setImageResource(android.R.drawable.ic_media_pause);
+        }else{
+            fab.setImageResource(android.R.drawable.ic_menu_edit);
+        }
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -56,22 +76,35 @@ public class gps_large_Activity extends AppCompatActivity {
                         Intent intent = null;
                         switch(menuItem.getItemId()){
                             case R.id.dashboard:
-                                finish();
+                                intent = new Intent(activity, DashboardActivity.class);
                                 break;
-                            case R.id.speed:
-                                intent = new Intent(activity, gps_large_Activity.class);
-                                startActivity(intent);
+                            case R.id.gps:
+                                //intent = new Intent(activity, gpsActivity.class);
                                 break;
                             case R.id.acceleration:
                                 intent = new Intent(activity, accelo_speed_Activity.class);
-                                startActivity(intent);
                                 break;
+                            case R.id.gyro:
+                                intent = new Intent(activity, gyroscope_Activity.class);
+                                break;
+                            case R.id.magneto:
+                                intent = new Intent(activity, magnetoActivity.class);
+                                break;
+                            case R.id.pressure:
+                                intent = new Intent(activity, pressureActivity.class);
+                                break;
+
                         }
+                        if(intent != null) {
+                            startActivity(intent);
+                        } else {
+                            Log.e("intent", "no Intent available");
+                        }
+
                         return true;
                     }
                 });
     }
-
     void Update() {
 
         updater = new Runnable() {
@@ -113,7 +146,7 @@ public class gps_large_Activity extends AppCompatActivity {
     public void onDestroy(){
         kill=true;
         timerHandler.removeCallbacks(updater);
-        LocationService.singleton.logging=false;
+        //LocationService.singleton.logging=false;
         Log.d("GPSActivity","Activity has been destroyed");
         super.onDestroy();
     }
@@ -139,4 +172,5 @@ public class gps_large_Activity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

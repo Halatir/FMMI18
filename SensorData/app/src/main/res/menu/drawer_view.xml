@@ -5,22 +5,19 @@
             android:id="@+id/dashboard"
             android:title="@string/dashboard" />
         <item
-            android:id="@+id/speed"
-            android:title="@string/speed" />
+            android:id="@+id/gps"
+            android:title="@string/gps" />
         <item
             android:id="@+id/acceleration"
             android:title="@string/acceleration" />
         <item
-            android:id="@+id/travel"
-            android:title="@string/travel" />
+            android:id="@+id/magneto"
+            android:title="@string/magneto" />
         <item
-            android:id="@+id/route"
-            android:title="@string/route" />
+            android:id="@+id/gyro"
+            android:title="@string/gyro" />
         <item
-            android:id="@+id/altitude"
-            android:title="@string/altitude" />
-        <item
-            android:id="@+id/direction"
-            android:title="@string/direction" />
+            android:id="@+id/pressure"
+            android:title="@string/pressure" />
     </group>
 </menu>

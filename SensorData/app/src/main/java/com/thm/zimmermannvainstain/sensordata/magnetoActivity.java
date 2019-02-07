@@ -3,7 +3,6 @@ package com.thm.zimmermannvainstain.sensordata;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -17,27 +16,23 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.Viewport;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
+import java.util.Locale;
 
-public class gyroscope_Activity extends AppCompatActivity {
+public class magnetoActivity extends AppCompatActivity {
 
-    final Handler timerHandler = new Handler();
     private Activity activity;
     private DrawerLayout mDrawerLayout;
-    private LineGraphSeries<DataPoint> mSeries;
-    private LineGraphSeries<DataPoint> mSeriesY;
-    private LineGraphSeries<DataPoint> mSeriesZ;
+    final Handler timerHandler = new Handler();
+    private ImageView imageViewCompass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gyro);
+        setContentView(R.layout.activity_magneto);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
@@ -45,9 +40,6 @@ public class gyroscope_Activity extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         activity = this;
-
-        Update();
-        createGraph();
 
         final FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +61,8 @@ public class gyroscope_Activity extends AppCompatActivity {
         }else{
             fab.setImageResource(android.R.drawable.ic_menu_edit);
         }
+        imageViewCompass=(ImageView)findViewById(R.id.compass);
+        Update();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -91,10 +85,10 @@ public class gyroscope_Activity extends AppCompatActivity {
                                 intent = new Intent(activity, accelo_speed_Activity.class);
                                 break;
                             case R.id.gyro:
-                                //intent = new Intent(activity, gyroscope_Activity.class);
+                                intent = new Intent(activity, gyroscope_Activity.class);
                                 break;
                             case R.id.magneto:
-                                intent = new Intent(activity, magnetoActivity.class);
+                                //intent = new Intent(activity, magnetoActivity.class);
                                 break;
                             case R.id.pressure:
                                 intent = new Intent(activity, pressureActivity.class);
@@ -111,43 +105,42 @@ public class gyroscope_Activity extends AppCompatActivity {
                     }
                 });
     }
-
-    //TODO Refactor OnPause OnResume
     Runnable updater;
-    private boolean kill=false;
+    private boolean kill = false;
+
     void Update() {
 
-
-
         updater = new Runnable() {
-            private int counter =0;
-            private TextView gyrX = (TextView) findViewById(R.id.gyrX);
-            private TextView gyrY = (TextView) findViewById(R.id.gyrY);
-            private TextView gyrZ = (TextView) findViewById(R.id.gyrZ);
-            private ImageView trafficGyr = (ImageView) findViewById(R.id.gyrTraffic);
+
+
+            private ImageView trafficMag = (ImageView) findViewById(R.id.MagTraffic);
+
+            private TextView magX = (TextView) findViewById(R.id.magX);
+            private TextView magY = (TextView) findViewById(R.id.magY);
+            private TextView magZ = (TextView) findViewById(R.id.magZ);
+
+            private boolean once =false;
 
             @SuppressLint("SetTextI18n")//remove to find all texts unable to translate
             @Override
             public void run() {
 
-                if(SensorService.singleton!=null&& SensorService.singleton.ready){
-                    float[] gyro = SensorService.singleton.getGyr();
-                    gyrX.setText(" " + Float.toString(gyro[0]));
-                    gyrY.setText(" " + Float.toString(gyro[1]));
-                    gyrZ.setText(" " + Float.toString(gyro[2]));
-                    makeTrafficLight((int)gyro[3],trafficGyr);
-                    mSeries.appendData(new DataPoint(counter,gyro[0]),true,1000);
-                    mSeriesY.appendData(new DataPoint(counter,gyro[1]),true,1000);
-                    mSeriesZ.appendData(new DataPoint(counter,gyro[2]),true,1000);
-                    counter++;
+                if (SensorService.singleton != null && SensorService.singleton.ready) {
 
-                }else{
+                    RotateAnimation rotateAnimation = SensorService.singleton.getRotation();
+                    imageViewCompass.setAnimation(rotateAnimation);
 
+                    float[] magneto = SensorService.singleton.getMag();
+                    magX.setText(" " + Float.toString(magneto[0]));
+                    magY.setText(" " + Float.toString(magneto[1]));
+                    magZ.setText(" " + Float.toString(magneto[2]));
+                    makeTrafficLight((int) magneto[3], trafficMag);
                 }
-                if(!kill)
-                    timerHandler.postDelayed(updater,100);//10 Frames a second
+                if (!kill)
+                    timerHandler.postDelayed(updater, 64);//15 frames right now
             }
         };
+
         timerHandler.post(updater);
     }
 
@@ -164,41 +157,6 @@ public class gyroscope_Activity extends AppCompatActivity {
                 break;
         }
     }
-    private void createGraph(){
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinX(-15);
-        graph.getViewport().setMaxX(15);
-        graph.getViewport().setMinY(-4);
-        graph.getViewport().setMaxY(4);
-        graph.getViewport().setYAxisBoundsStatus(Viewport.AxisBoundsStatus.FIX);
-        mSeries = new LineGraphSeries<>();
-        mSeriesY = new LineGraphSeries<>();
-        mSeriesZ = new LineGraphSeries<>();
-        graph.addSeries(mSeries);
-        graph.addSeries(mSeriesY);
-        graph.addSeries(mSeriesZ);
-
-
-        //graph.getGridLabelRenderer().setNumVerticalLabels(5);
-
-        mSeries.setTitle("X-Achse");
-        mSeries.setColor(Color.GREEN);
-        mSeries.setDrawDataPoints(true);
-        mSeries.setDataPointsRadius(10);
-
-        mSeriesY.setTitle("Y-Achse");
-        mSeriesY.setColor(Color.RED);
-        mSeriesY.setDrawDataPoints(true);
-        mSeriesY.setDataPointsRadius(10);
-
-        mSeriesZ.setTitle("Z-Achse");
-        mSeriesZ.setColor(Color.BLUE);
-        mSeriesZ.setDrawDataPoints(true);
-        mSeriesZ.setDataPointsRadius(10);
-    }
-
     @Override
     public void onPause(){
         kill=true;
@@ -218,6 +176,7 @@ public class gyroscope_Activity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

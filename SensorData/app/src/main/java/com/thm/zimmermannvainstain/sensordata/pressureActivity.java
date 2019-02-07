@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,29 +26,27 @@ import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-public class gyroscope_Activity extends AppCompatActivity {
+import java.util.Locale;
 
-    final Handler timerHandler = new Handler();
+public class pressureActivity extends AppCompatActivity {
+
     private Activity activity;
     private DrawerLayout mDrawerLayout;
+    final Handler timerHandler = new Handler();
     private LineGraphSeries<DataPoint> mSeries;
-    private LineGraphSeries<DataPoint> mSeriesY;
-    private LineGraphSeries<DataPoint> mSeriesZ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gyro);
+        setContentView(R.layout.activity_pressure);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         activity = this;
-
-        Update();
-        createGraph();
 
         final FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +69,9 @@ public class gyroscope_Activity extends AppCompatActivity {
             fab.setImageResource(android.R.drawable.ic_menu_edit);
         }
 
+        Update();
+        createGraph();
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -91,13 +93,13 @@ public class gyroscope_Activity extends AppCompatActivity {
                                 intent = new Intent(activity, accelo_speed_Activity.class);
                                 break;
                             case R.id.gyro:
-                                //intent = new Intent(activity, gyroscope_Activity.class);
+                                intent = new Intent(activity, gyroscope_Activity.class);
                                 break;
                             case R.id.magneto:
                                 intent = new Intent(activity, magnetoActivity.class);
                                 break;
                             case R.id.pressure:
-                                intent = new Intent(activity, pressureActivity.class);
+                                //intent = new Intent(activity, pressureActivity.class);
                                 break;
 
                         }
@@ -111,46 +113,42 @@ public class gyroscope_Activity extends AppCompatActivity {
                     }
                 });
     }
-
-    //TODO Refactor OnPause OnResume
     Runnable updater;
-    private boolean kill=false;
+    private boolean kill = false;
+
     void Update() {
 
-
-
         updater = new Runnable() {
-            private int counter =0;
-            private TextView gyrX = (TextView) findViewById(R.id.gyrX);
-            private TextView gyrY = (TextView) findViewById(R.id.gyrY);
-            private TextView gyrZ = (TextView) findViewById(R.id.gyrZ);
-            private ImageView trafficGyr = (ImageView) findViewById(R.id.gyrTraffic);
+
+            private TextView baro = (TextView) findViewById(R.id.pressureT);
+            private TextView height = (TextView) findViewById(R.id.height);
+
+            private ImageView trafficPress = (ImageView) findViewById(R.id.pressTraffic);
+            int counter =0;
 
             @SuppressLint("SetTextI18n")//remove to find all texts unable to translate
             @Override
             public void run() {
 
-                if(SensorService.singleton!=null&& SensorService.singleton.ready){
-                    float[] gyro = SensorService.singleton.getGyr();
-                    gyrX.setText(" " + Float.toString(gyro[0]));
-                    gyrY.setText(" " + Float.toString(gyro[1]));
-                    gyrZ.setText(" " + Float.toString(gyro[2]));
-                    makeTrafficLight((int)gyro[3],trafficGyr);
-                    mSeries.appendData(new DataPoint(counter,gyro[0]),true,1000);
-                    mSeriesY.appendData(new DataPoint(counter,gyro[1]),true,1000);
-                    mSeriesZ.appendData(new DataPoint(counter,gyro[2]),true,1000);
+                if (SensorService.singleton != null && SensorService.singleton.ready) {
+
+
+                    float[] pressure = SensorService.singleton.getPress();
+                    baro.setText("Luftdruck: " + Float.toString(pressure[0]));
+                    height.setText("Höhe (ca.): " + pressure[1]);
+                    makeTrafficLight((int) pressure[2], trafficPress);
+                    mSeries.appendData(new DataPoint(counter,pressure[0]),true,1000);
                     counter++;
 
-                }else{
 
                 }
-                if(!kill)
-                    timerHandler.postDelayed(updater,100);//10 Frames a second
+                if (!kill)
+                    timerHandler.postDelayed(updater, 64);//15 frames right now
             }
         };
+
         timerHandler.post(updater);
     }
-
     private void makeTrafficLight(int a, ImageView image) {
         switch (a) {
             case 1:
@@ -164,39 +162,26 @@ public class gyroscope_Activity extends AppCompatActivity {
                 break;
         }
     }
+
     private void createGraph(){
         GraphView graph = (GraphView) findViewById(R.id.graph);
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(-15);
         graph.getViewport().setMaxX(15);
-        graph.getViewport().setMinY(-4);
-        graph.getViewport().setMaxY(4);
+        graph.getViewport().setMinY(900);
+        graph.getViewport().setMaxY(1000);
         graph.getViewport().setYAxisBoundsStatus(Viewport.AxisBoundsStatus.FIX);
         mSeries = new LineGraphSeries<>();
-        mSeriesY = new LineGraphSeries<>();
-        mSeriesZ = new LineGraphSeries<>();
         graph.addSeries(mSeries);
-        graph.addSeries(mSeriesY);
-        graph.addSeries(mSeriesZ);
 
 
         //graph.getGridLabelRenderer().setNumVerticalLabels(5);
 
-        mSeries.setTitle("X-Achse");
+        mSeries.setTitle("Luftdruck");
         mSeries.setColor(Color.GREEN);
         mSeries.setDrawDataPoints(true);
         mSeries.setDataPointsRadius(10);
-
-        mSeriesY.setTitle("Y-Achse");
-        mSeriesY.setColor(Color.RED);
-        mSeriesY.setDrawDataPoints(true);
-        mSeriesY.setDataPointsRadius(10);
-
-        mSeriesZ.setTitle("Z-Achse");
-        mSeriesZ.setColor(Color.BLUE);
-        mSeriesZ.setDrawDataPoints(true);
-        mSeriesZ.setDataPointsRadius(10);
     }
 
     @Override
@@ -218,6 +203,7 @@ public class gyroscope_Activity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -226,5 +212,6 @@ public class gyroscope_Activity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 }

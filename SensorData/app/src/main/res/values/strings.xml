@@ -4,7 +4,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="speed">Geschwindigkeit</string>
+    <string name="gps">GPS</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -15,10 +15,13 @@
     <string name="title_activity_accelo_speed_">accelo_speed_Activity</string>
     <string name="dashboard">Dashboard</string>
     <string name="acceleration">Beschleunigung</string>
-    <string name="travel">Fahrzeit</string>
-    <string name="route">Strecke</string>
-    <string name="altitude">Höhenmeter</string>
+    <string name="magneto">Magnetometer</string>
+    <string name="gyro">Gyroskop</string>
+    <string name="pressure">Luftdruck</string>
     <string name="direction">Fahrtrichtung</string>
     <string name="title_activity_gyro">GyroActivity</string>
+    <string name="title_activity_magneto">magnetoActivity</string>
+    <string name="title_activity_pressure">pressureActivity</string>
+    <string name="title_activity_gps">gpsActivity</string>
 
 </resources>

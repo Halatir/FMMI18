@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -50,14 +49,26 @@ public class accelo_speed_Activity extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.drawer_layout);
         activity = this;
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (SensorService.singleton.logging) {
+                    SensorService.singleton.stopLogging();
+                    LocationService.singleton.stopLogging();
+                    fab.setImageResource(android.R.drawable.ic_menu_edit);
+                } else {
+                    SensorService.singleton.logging = true;
+                    LocationService.singleton.logging = true;
+                    fab.setImageResource(android.R.drawable.ic_media_pause);
+                }
             }
         });
+        if(SensorService.singleton.ready && SensorService.singleton.logging){
+            fab.setImageResource(android.R.drawable.ic_media_pause);
+        }else{
+            fab.setImageResource(android.R.drawable.ic_menu_edit);
+        }
         Update();
         createGraph();
 
@@ -75,12 +86,22 @@ public class accelo_speed_Activity extends AppCompatActivity {
                             case R.id.dashboard:
                                 intent = new Intent(activity, DashboardActivity.class);
                                 break;
-                            case R.id.speed:
-                                intent = new Intent(activity, gps_large_Activity.class);
+                            case R.id.gps:
+                                intent = new Intent(activity, gpsActivity.class);
                                 break;
                             case R.id.acceleration:
-                                intent = new Intent(activity, accelo_speed_Activity.class);
+                                //intent = new Intent(activity, accelo_speed_Activity.class);
                                 break;
+                            case R.id.gyro:
+                                intent = new Intent(activity, gyroscope_Activity.class);
+                                break;
+                            case R.id.magneto:
+                                intent = new Intent(activity, magnetoActivity.class);
+                                break;
+                            case R.id.pressure:
+                                intent = new Intent(activity, pressureActivity.class);
+                                break;
+
                         }
                         if(intent != null) {
                             startActivity(intent);
@@ -209,6 +230,13 @@ public class accelo_speed_Activity extends AppCompatActivity {
         kill=false;
         Update();
         super.onResume();
+    }
+
+    @Override
+    public void onDestroy(){
+        kill=true;
+        timerHandler.removeCallbacks(updater);
+        super.onDestroy();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

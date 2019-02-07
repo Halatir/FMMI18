@@ -28,13 +28,10 @@ public class SensorService extends Service implements SensorEventListener {
     private float[] Acc_o_g = {0.0f,0.0f,0.0f};
     private float[] Gyr = new float[4];
     private float[] pressure = {0.0f,0.0f,0.0f};
-<<<<<<< HEAD
-    private float[] gravity = new float[4];
-=======
-    private float[] geo = new float[3];
+
+    private float[] geo = new float[4];
     private float[] lowMag = new float[3];
     private float[] lowAcc = new float[3];
->>>>>>> e47bca3b604ad73450d0a336a75bda17b3977465
 
     private float lastDirectionInDegrees = 0f;
     private RotateAnimation rotateAnimation;
@@ -124,29 +121,7 @@ public class SensorService extends Service implements SensorEventListener {
                 }
                 float[] magneto = {event.values[0], event.values[1],event.values[2],event.accuracy};
                 setMag(magneto);
-<<<<<<< HEAD
-                boolean success = SensorManager.getRotationMatrix(
-                        rotationMatrix, null, Acc,
-                        gravity);
-                if(success) {
-                    float[] orientationValues = new float[3];
-                    SensorManager.getOrientation(rotationMatrix,
-                            orientationValues);
-                    float azimuth = (float) Math.toDegrees(
-                            -orientationValues[0]);
-                    rotateAnimation = new
-                            RotateAnimation(
-                            lastDirectionInDegrees, azimuth,
-                            Animation.RELATIVE_TO_SELF, 0.5f,
-                            Animation.RELATIVE_TO_SELF, 0.5f);
-                    rotateAnimation.setDuration(50);
-                    rotateAnimation.setFillAfter(true);
-
-                    lastDirectionInDegrees = azimuth;
-                }
-=======
                 lowMag = applyLowPassFilter(event.values.clone(), lowMag);
->>>>>>> e47bca3b604ad73450d0a336a75bda17b3977465
                 break;
             case Sensor.TYPE_ACCELEROMETER:
                 if(logging){
@@ -232,6 +207,26 @@ public class SensorService extends Service implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    public void stopLogging(){
+        logging=false;
+        String data = GyrLog.toString();
+        LogService.WriteDataToFile(this,data,"gyroscope");
+        GyrLog.clear();
+        String data1 = BaroLog.toString();
+        LogService.WriteDataToFile(this,data1,"barometer");
+        BaroLog.clear();
+        String data2 = AccLog.toString();
+        LogService.WriteDataToFile(this,data2,"accelerometer");
+        AccLog.clear();
+        String data3 = MagLog.toString();
+        LogService.WriteDataToFile(this,data3,"magnetic_field");
+        MagLog.clear();
+    /*String data4 = LightLog.toString();
+        LogService.WriteDataToFile(this,data4,"light");
+        LightLog.clear();*/
 
     }
 

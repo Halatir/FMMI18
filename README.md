@@ -16,26 +16,21 @@ Export Icon: https://www.flaticon.com/free-icon/export-file_1236616#term=export&
 
 - [x] start sensor service on start
 - [x] export sensorData file on Buttonclick (floating action Button)
-- [-] change screen content on menuitem click
-- [-] traffic light status for menuitems
-- [-] dashboard content
-- [ ] compass view in dashboard
+- [x] change screen content on menuitem click
+- [x] traffic light status for menuitems
+- [x] dashboard content
+- [x] compass view in dashboard
 - [ ] sensordata content:
-    - [-] Geschwindigkeit (Durchschnitt, Maximal, Aktuell)(via GPS)test nötig
+    - [x] Geschwindigkeit (Durchschnitt, Maximal, Aktuell)(via GPS)test nötig
     - [x] Beschleunigung (mit g / ohne g)
     - [ ] Ortsposition
     - [-] Strecke (km / bildlich) bildlich sehr sehr aufwendig
     - [x] Luftdruck
-    - [ ] Rotation
+    - [x] Rotation
 
 Graph Library: 
  'com.jjoe64:graphview:4.2.2'
 
-aufzeichnungsbutton tauschen für feedback in subactivitys
-Gyroscop, Magneto single sides
-Log on Stop of logging
 höhe via GPS
-
-start/stop
-kill Service correct?
-
+Spracheingabe?
+animations

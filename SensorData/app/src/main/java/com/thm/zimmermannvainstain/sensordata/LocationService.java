@@ -72,6 +72,14 @@ public class LocationService extends Service implements LocationListener {
         Log.d("SensorData","Service has been destroyed");
     }
 
+
+    public void stopLogging(){
+        logging=false;
+        String data = gpsLog.toString();
+        LogService.WriteDataToFile(this,data,"gyroscope");
+        gpsLog.clear();
+    }
+
     public LocationService() {
     }
 

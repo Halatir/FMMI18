@@ -32,9 +32,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".gps_large_Activity"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".SensorService"
@@ -72,6 +69,18 @@
         <activity
             android:name=".gyroscope_Activity"
             android:label="@string/title_activity_gyro"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".magnetoActivity"
+            android:label="@string/title_activity_magneto"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".pressureActivity"
+            android:label="@string/title_activity_pressure"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".gpsActivity"
+            android:label="@string/title_activity_gps"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
