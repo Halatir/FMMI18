@@ -1,6 +1,8 @@
 package com.thm.zimmermannvainstain.sensordata;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -26,6 +28,7 @@ public class gps_large_Activity extends AppCompatActivity {
     Runnable updater;
     private boolean kill = false;
     private DrawerLayout mDrawerLayout;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class gps_large_Activity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawerLayout = findViewById(R.id.drawer_layout);
+        activity = this;
 
         Update();
 
@@ -49,12 +53,20 @@ public class gps_large_Activity extends AppCompatActivity {
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
-
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-                        String msg = menuItem.toString() + " was clicked";
-                        Log.i("menuitem", msg);
-
+                        Intent intent = null;
+                        switch(menuItem.getItemId()){
+                            case R.id.dashboard:
+                                finish();
+                                break;
+                            case R.id.speed:
+                                intent = new Intent(activity, gps_large_Activity.class);
+                                startActivity(intent);
+                                break;
+                            case R.id.acceleration:
+                                intent = new Intent(activity, accelo_speed_Activity.class);
+                                startActivity(intent);
+                                break;
+                        }
                         return true;
                     }
                 });

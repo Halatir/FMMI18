@@ -57,7 +57,6 @@ public class SensorService extends Service implements SensorEventListener {
         context= getApplicationContext();
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
-        mSensorManager = (SensorManager)context.getSystemService(context.SENSOR_SERVICE);
         Sensor m_Accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Sensor m_Gyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         Sensor m_Barometer = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
@@ -117,7 +116,8 @@ public class SensorService extends Service implements SensorEventListener {
                         MagLog.clear();
                     }
                 }
-                setMag(event.values.clone());
+                float[] magneto = {event.values[0], event.values[1],event.values[2],event.accuracy};
+                setMag(magneto);
                 //float[] f = {event.values[0], event.values[1],event.values[2],event.accuracy};
                 boolean success = SensorManager.getRotationMatrix(
                         rotationMatrix, null, Acc,
