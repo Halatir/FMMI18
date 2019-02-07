@@ -36,7 +36,7 @@ public class LocationService extends Service implements LocationListener {
     public boolean logging = false;
     private double[] lastDistGPS = {0.0d,0.0d,0.0d};
 
-    private static int bufferAmount = 1000;
+    private static int bufferAmount = 20;
     private ArrayList gpsLog = new ArrayList(bufferAmount);
     private ArrayList speeds = new ArrayList();
 

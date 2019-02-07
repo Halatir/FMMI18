@@ -7,7 +7,6 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.SensorManager;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -94,14 +93,9 @@ public class DashboardActivity extends AppCompatActivity {
 
     void Update() {
 
-        //float [] mAcceletationValues = new float[3];
-        float[] mRotationMatrix = new float[9];
-        float mLastDirectionInDegrees = 0f;
-
         updater = new Runnable() {
 
             Context context = getApplicationContext();
-            SensorManager mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
             private TextView lat = (TextView) findViewById(R.id.lat);
             private TextView longi = (TextView) findViewById(R.id.longi);
@@ -114,6 +108,10 @@ public class DashboardActivity extends AppCompatActivity {
             private TextView accY = (TextView) findViewById(R.id.ohnegY);
             private TextView accZ = (TextView) findViewById(R.id.ohnegZ);
 
+            private TextView gyrX = (TextView) findViewById(R.id.gyrX);
+            private TextView gyrY = (TextView) findViewById(R.id.gyrY);
+            private TextView gyrZ = (TextView) findViewById(R.id.gyrZ);
+
             private TextView baro = (TextView) findViewById(R.id.pressureT);
             private TextView height = (TextView) findViewById(R.id.height);
 
@@ -121,6 +119,7 @@ public class DashboardActivity extends AppCompatActivity {
             private ImageView trafficGps = (ImageView) findViewById(R.id.gpsTraffic);
             private ImageView trafficPress = (ImageView) findViewById(R.id.pressTraffic);
             private ImageView trafficMag = (ImageView) findViewById(R.id.MagTraffic);
+            private ImageView trafficGyr = (ImageView) findViewById(R.id.gyrTraffic);
 
             private TextView magX = (TextView) findViewById(R.id.magX);
             private TextView magY = (TextView) findViewById(R.id.magY);
@@ -162,7 +161,6 @@ public class DashboardActivity extends AppCompatActivity {
 
                     makeTrafficLight((int) f[3], TrafficAcc);
 
-
                     float[] pressure = SensorService.singleton.getPress();
                     baro.setText("Luftdruck: " + Float.toString(pressure[0]));
                     height.setText("Höhe (ca.): " + pressure[1]);
@@ -175,6 +173,14 @@ public class DashboardActivity extends AppCompatActivity {
                     magX.setText(" " + Float.toString(magneto[0]));
                     magY.setText(" " + Float.toString(magneto[1]));
                     magZ.setText(" " + Float.toString(magneto[2]));
+                    makeTrafficLight((int)magneto[3],trafficMag);
+
+                    float[] gyro = SensorService.singleton.getGyr();
+                    gyrX.setText(" " + Float.toString(gyro[0]));
+                    gyrY.setText(" " + Float.toString(gyro[1]));
+                    gyrZ.setText(" " + Float.toString(gyro[2]));
+                    makeTrafficLight((int)gyro[3],trafficGyr);
+
 
                 } else {
                     accXg.setText("SensorService not Active");
@@ -246,6 +252,12 @@ public class DashboardActivity extends AppCompatActivity {
                         Pair.create(findViewById(R.id.AccTraffic), "accTraffic"));
                 Intent intent = new Intent(activity, accelo_speed_Activity.class);
                 startActivity(intent, options.toBundle());
+            }
+        });
+        findViewById(R.id.magneto).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                //Intent intent = new Intent(activity, )
             }
         });
     }

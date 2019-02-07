@@ -31,8 +31,8 @@ Export Icon: https://www.flaticon.com/free-icon/export-file_1236616#term=export&
 Graph Library: 
  'com.jjoe64:graphview:4.2.2'
 
-Timestamp richtig ausrechnen
 aufzeichnungsbutton tauschen für feedback in subactivitys
 Kompass? Flüssiger
-Gyroscop
+Gyroscop, Magneto single sides
+Log on Stop of logging
 
