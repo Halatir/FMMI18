@@ -65,7 +65,6 @@ public class SensorService extends Service implements SensorEventListener {
         Sensor m_Accelo_ohne_g = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         Sensor m_light = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         Sensor m_magneto = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        Sensor m_orientation = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
         HandlerThread m_SensorThread = new HandlerThread("Sensor thread", Thread.MAX_PRIORITY);
         m_SensorThread.start();
