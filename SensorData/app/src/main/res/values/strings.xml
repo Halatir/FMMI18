@@ -18,4 +18,5 @@
     <string name="route">Strecke</string>
     <string name="altitude">Höhenmeter</string>
     <string name="direction">Fahrtrichtung</string>
+    <string name="dashboard">Dashboard</string>
 </resources>

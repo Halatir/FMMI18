@@ -2,28 +2,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/dashboard"
+            android:title="@string/dashboard" />
+        <item
             android:id="@+id/speed"
-            android:icon="@drawable/export"
             android:title="@string/speed" />
         <item
             android:id="@+id/acceleration"
-            android:icon="@drawable/export"
             android:title="@string/acceleration" />
         <item
             android:id="@+id/travel"
-            android:icon="@drawable/export"
             android:title="@string/travel" />
         <item
             android:id="@+id/route"
-            android:icon="@drawable/export"
             android:title="@string/route" />
         <item
             android:id="@+id/altitude"
-            android:icon="@drawable/export"
             android:title="@string/altitude" />
         <item
             android:id="@+id/direction"
-            android:icon="@drawable/export"
             android:title="@string/direction" />
     </group>
 </menu>
