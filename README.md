@@ -34,3 +34,5 @@ Graph Library:
 höhe via GPS
 Spracheingabe?
 animations
+GPS AMPEL!
+check Log

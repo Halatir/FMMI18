@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -57,16 +58,6 @@
         app:layout_constraintTop_toBottomOf="@+id/accY" />
 
     <TextView
-        android:id="@+id/hochst"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Höchstgeschwindigkeit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/graph" />
-
-    <TextView
         android:id="@+id/mitg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,9 +85,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="TextView"
+        android:transitionName="mitgX"
         app:layout_constraintStart_toStartOf="@+id/mitg"
-        app:layout_constraintTop_toBottomOf="@+id/mitg"
-        android:transitionName="mitgX"/>
+        app:layout_constraintTop_toBottomOf="@+id/mitg" />
 
     <TextView
         android:id="@+id/mitgY"
@@ -104,9 +95,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="TextView"
+        android:transitionName="mitgY"
         app:layout_constraintStart_toStartOf="@+id/mitg"
-        app:layout_constraintTop_toBottomOf="@+id/mitgX"
-        android:transitionName="mitgY"/>
+        app:layout_constraintTop_toBottomOf="@+id/mitgX" />
 
     <TextView
         android:id="@+id/mitgZ"
@@ -114,9 +105,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="TextView"
+        android:transitionName="mitgZ"
         app:layout_constraintStart_toStartOf="@+id/mitg"
-        app:layout_constraintTop_toBottomOf="@+id/mitgY"
-        android:transitionName="mitgZ"/>
+        app:layout_constraintTop_toBottomOf="@+id/mitgY" />
 
     <TextView
         android:id="@+id/ohnegX"
@@ -124,9 +115,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="TextView"
+        android:transitionName="ohnegX"
         app:layout_constraintStart_toStartOf="@+id/ohneG"
-        app:layout_constraintTop_toBottomOf="@+id/ohneG"
-        android:transitionName="ohnegX"/>
+        app:layout_constraintTop_toBottomOf="@+id/ohneG" />
 
     <TextView
         android:id="@+id/ohnegY"
@@ -134,9 +125,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="TextView"
+        android:transitionName="ohnegY"
         app:layout_constraintStart_toStartOf="@+id/ohneG"
-        app:layout_constraintTop_toBottomOf="@+id/ohnegX"
-        android:transitionName="ohnegY"/>
+        app:layout_constraintTop_toBottomOf="@+id/ohnegX" />
 
     <TextView
         android:id="@+id/ohnegZ"
@@ -144,9 +135,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="TextView"
+        android:transitionName="ohnegZ"
         app:layout_constraintStart_toStartOf="@+id/ohneG"
-        app:layout_constraintTop_toBottomOf="@+id/ohnegY"
-        android:transitionName="ohnegZ"/>
+        app:layout_constraintTop_toBottomOf="@+id/ohnegY" />
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
@@ -162,9 +153,19 @@
         android:layout_width="29dp"
         android:layout_height="26dp"
         android:layout_marginEnd="16dp"
+        android:transitionName="accTraffic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/Headline"
-        app:srcCompat="@drawable/dot_red"
-        android:transitionName="accTraffic"/>
+        app:srcCompat="@drawable/dot_red" />
+
+    <TextView
+        android:id="@+id/hochst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Höchstgeschwindigkeit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/graph" />
 
 </android.support.constraint.ConstraintLayout>

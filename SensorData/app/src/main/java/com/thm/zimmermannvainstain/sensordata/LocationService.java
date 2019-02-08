@@ -28,13 +28,13 @@ public class LocationService extends Service implements LocationListener {
 
     Context context;
 
-    private double[] GPS = {0.0d,0.0d,50.0d};
+    private double[] GPS = {0.0d,0.0d,50.0d,0.0d};
     public float speed =0.0f;
     public float maxSpeed =0.0f;
     public float avgSpeed =0.0f;
     public float distance =0.0f;
     public boolean logging = false;
-    private double[] lastDistGPS = {0.0d,0.0d,0.0d};
+    private double[] lastDistGPS = {0.0d,0.0d,0.0d,0.0d};
 
     private static int bufferAmount = 20;
     private ArrayList gpsLog = new ArrayList(bufferAmount);
@@ -103,10 +103,11 @@ public class LocationService extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        double[] d = new double [3];
+        double[] d = new double [4];
         d[0] = location.getLatitude();
         d[1] = location.getLongitude();
         d[2] = location.getAccuracy();
+        d[3] = location.getAltitude();
 
         setGPS(d);
 
@@ -122,7 +123,7 @@ public class LocationService extends Service implements LocationListener {
         }
         if(logging){
             String log = Long.toString(location.getTime()) +"," + Double.toString(location.getLatitude()) + "," +
-                    Double.toString(location.getLongitude()) + "," + Double.toString(location.getAccuracy()) + "," + location.getProvider() + "\n\r" ;
+                    Double.toString(location.getLongitude()) + ","+Double.toString(location.getAltitude())+"," + Double.toString(location.getAccuracy()) + "," + location.getProvider() + "\n\r" ;
             gpsLog.add(log);
             if(gpsLog.size()==bufferAmount){
                 String data = gpsLog.toString();

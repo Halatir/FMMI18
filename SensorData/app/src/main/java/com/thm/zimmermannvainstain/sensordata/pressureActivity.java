@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -15,8 +17,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,7 +30,11 @@ import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public class pressureActivity extends AppCompatActivity {
 
@@ -34,6 +42,7 @@ public class pressureActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     final Handler timerHandler = new Handler();
     private LineGraphSeries<DataPoint> mSeries;
+    private boolean voice =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +179,7 @@ public class pressureActivity extends AppCompatActivity {
         graph.getViewport().setMinX(-15);
         graph.getViewport().setMaxX(15);
         graph.getViewport().setMinY(900);
-        graph.getViewport().setMaxY(1000);
+        graph.getViewport().setMaxY(1100);
         graph.getViewport().setYAxisBoundsStatus(Viewport.AxisBoundsStatus.FIX);
         mSeries = new LineGraphSeries<>();
         graph.addSeries(mSeries);
@@ -186,13 +195,17 @@ public class pressureActivity extends AppCompatActivity {
 
     @Override
     public void onPause(){
-        kill=true;
+        if(!voice){
+            kill=true;}
+
         super.onPause();
     }
     @Override
     public void onResume(){
-        kill=false;
-        Update();
+        if (!voice) {
+            kill=false;
+            Update();}
+        voice=false;
         super.onResume();
     }
 
@@ -202,13 +215,61 @@ public class pressureActivity extends AppCompatActivity {
         timerHandler.removeCallbacks(updater);
         super.onDestroy();
     }
+    private int position = 5;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        TextView tv = new TextView(this);
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(0, WRAP_CONTENT);
+
+        if(requestCode == 123 && resultCode == RESULT_OK){
+            if(position==5){
+                View last = findViewById(R.id.graph);
+                layoutParams.leftToLeft = last.getId();
+                layoutParams.topToBottom = last.getId();
+            }else{
+                layoutParams.leftToLeft = position-1;
+                layoutParams.topToBottom = position-1;
+            }
+            layoutParams.rightMargin=0;
+            layoutParams.topMargin = 8;
+            tv.setLayoutParams(layoutParams);
+            long millis = System.currentTimeMillis();
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            tv.setText(result.get(0)+" "+getDate(millis));
+
+            String allVoice = "\n\r"+result.get(0)+","+Long.toString(millis) + ",gps";
+            LogService.WriteDataToFile(this,allVoice,"VoiceNodes");
+
+            ViewGroup layout = (ViewGroup) findViewById(R.id.root);
+            layout.addView(tv,position);
+
+            position++;
+        }
+    }
+    private String getDate(long time) {
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        String reportDate = df.format(time);
+        return reportDate;
+    }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
+        return true;
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.action_voice:
+                voice=true;
+                Intent voiceIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                voiceIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                voiceIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Please Speak");
+                startActivityForResult(voiceIntent, 123);
         }
         return super.onOptionsItemSelected(item);
     }

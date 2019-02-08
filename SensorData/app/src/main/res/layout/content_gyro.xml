@@ -2,30 +2,12 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".gyroscope_Activity"
     tools:showIn="@layout/activity_gyro">
-
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph"
-        android:layout_width="match_parent"
-        android:layout_height="200dip"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gyrZ" />
-
-    <ImageView
-        android:id="@+id/gyrTraffic"
-        android:layout_width="29dp"
-        android:layout_height="26dp"
-        android:layout_marginEnd="16dp"
-        android:transitionName="magTraffic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/gyroHead"
-        app:srcCompat="@drawable/dot_red" />
 
     <TextView
         android:id="@+id/gyroHead"
@@ -104,4 +86,23 @@
         android:transitionName="magZ"
         app:layout_constraintStart_toEndOf="@+id/gyrDescZ"
         app:layout_constraintTop_toBottomOf="@+id/gyrY" />
+
+    <ImageView
+        android:id="@+id/gyrTraffic"
+        android:layout_width="29dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="16dp"
+        android:transitionName="magTraffic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gyroHead"
+        app:srcCompat="@drawable/dot_red" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gyrZ" />
 </android.support.constraint.ConstraintLayout>

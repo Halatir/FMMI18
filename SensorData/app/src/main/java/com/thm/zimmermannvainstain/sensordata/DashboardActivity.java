@@ -243,6 +243,7 @@ public class DashboardActivity extends AppCompatActivity {
                 image.setImageResource(R.drawable.dot_orange);
                 break;
             case 3:
+            case 0:
                 image.setImageResource(R.drawable.dot_grun);
                 break;
         }
@@ -319,12 +320,6 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
-        return true;
-    }
 
     //If MainActivity is destroyed before App is suspended ( zb. because we are in another Activty real long) our services get destrpyed.//TODO Check
     @Override
@@ -370,6 +365,15 @@ public class DashboardActivity extends AppCompatActivity {
             // permissions this app might request.
         }
     }
+
+
+  /*  @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
+        return true;
+    }*/
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

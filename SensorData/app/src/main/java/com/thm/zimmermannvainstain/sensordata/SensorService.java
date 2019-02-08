@@ -50,34 +50,34 @@ public class SensorService extends Service implements SensorEventListener {
     private ArrayList MagLog = new ArrayList(bufferAmount);
 
     @Override
-    public int onStartCommand(Intent intent,int flags, int startId){
-        if(singleton==null){
-            singleton = this;
-        }else{
-            stopSelf();
-        }
+           public int onStartCommand(Intent intent,int flags, int startId){
+            if(singleton==null){
+                singleton = this;
+            }else{
+                stopSelf();
+            }
 
-        context= getApplicationContext();
-        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+            context= getApplicationContext();
+            mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
-        Sensor m_Accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        Sensor m_Gyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        Sensor m_Barometer = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
-        Sensor m_Accelo_ohne_g = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        Sensor m_light = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        Sensor m_magneto = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+            Sensor m_Accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            Sensor m_Gyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+            Sensor m_Barometer = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
+            Sensor m_Accelo_ohne_g = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+            Sensor m_light = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+            Sensor m_magneto = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-        HandlerThread m_SensorThread = new HandlerThread("Sensor thread", Thread.MAX_PRIORITY);
-        m_SensorThread.start();
-        Handler mSensorHandler = new Handler(m_SensorThread.getLooper());
-        mSensorManager.registerListener(this, m_Accelerometer, 8300, mSensorHandler);//120 sample in one second
-        mSensorManager.registerListener(this, m_Gyroscope,8300, mSensorHandler);
-        mSensorManager.registerListener(this,m_Barometer,8300,mSensorHandler);
-        mSensorManager.registerListener(this, m_Accelo_ohne_g,8300,mSensorHandler);
-        mSensorManager.registerListener(this, m_light, 8300, mSensorHandler);
-        mSensorManager.registerListener(this,m_magneto,8300,mSensorHandler);
-        ready=true;
-        return super.onStartCommand(intent, flags, startId);
+            HandlerThread m_SensorThread = new HandlerThread("Sensor thread", Thread.MAX_PRIORITY);
+            m_SensorThread.start();
+            Handler mSensorHandler = new Handler(m_SensorThread.getLooper());
+            mSensorManager.registerListener(this, m_Accelerometer, 8300, mSensorHandler);//120 sample in one second
+            mSensorManager.registerListener(this, m_Gyroscope,8300, mSensorHandler);
+            mSensorManager.registerListener(this,m_Barometer,8300,mSensorHandler);
+            mSensorManager.registerListener(this, m_Accelo_ohne_g,8300,mSensorHandler);
+            mSensorManager.registerListener(this, m_light, 8300, mSensorHandler);
+            mSensorManager.registerListener(this,m_magneto,8300,mSensorHandler);
+            ready=true;
+            return super.onStartCommand(intent, flags, startId);
 
     }
 
